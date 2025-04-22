@@ -1,0 +1,52 @@
+services:
+  react-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: react-frontend
+    ports:
+      - "80:80"
+    networks:
+      - aqualife-network
+    depends_on:
+      - fastapi-backend
+
+  fastapi-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: fastapi-backend
+    ports:
+      - "8000:8000"
+    networks:
+      - aqualife-network
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:13
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: sabag
+      POSTGRES_PASSWORD: 61339125
+      POSTGRES_DB: aqualife
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - aqualife-network
+
+  llm-service:
+    image: alpine
+    container_name: llm-service
+    command: sh -c "echo 'LLM service not yet implemented' && sleep infinity"
+    networks:
+      - aqualife-network
+
+networks:
+  aqualife-network:
+    driver: bridge
+
+volumes:
+  postgres-data:

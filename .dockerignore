@@ -1,0 +1,28 @@
+# Ignore Python bytecode files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Ignore version control directories
+.git/
+.svn/
+
+# Ignore IDE/editor folders
+.vscode/
+.idea/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore local environment files
+.env
+
+# Ignore node_modules in case you have a frontend directory
+frontend/node_modules/
+
+# Ignore build and log files
+frontend/build/
+frontend/dist/
+*.log
