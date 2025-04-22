@@ -27,9 +27,9 @@ services:
     image: postgres:13
     container_name: postgres-db
     environment:
-      POSTGRES_USER: sabag
-      POSTGRES_PASSWORD: 61339125
-      POSTGRES_DB: aqualife
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydatabase
     ports:
       - "5432:5432"
     volumes:
