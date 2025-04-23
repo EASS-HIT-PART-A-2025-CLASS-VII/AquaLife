@@ -1,8 +1,16 @@
-from sqlalchemy import Column, Integer, String, Date, JSON
+from sqlalchemy import Column, Integer, String, Date, JSON, Enum as SqlEnum
 from db.base import Base
 from pydantic import BaseModel, ConfigDict, EmailStr
 from typing import Optional
+import enum
 
+
+
+
+class UserRole(enum.Enum):
+    ADMIN = "admin"
+    USER = "user"
+    MODERATOR = "moderator"
 
 # SQLAlchemy model for define the actual table structure
 # This is what ORM uses to query, update, or delete from PostgreSQL
@@ -16,6 +24,7 @@ class User(Base):
     email = Column(String, unique=True, nullable=False)
     birthdate = Column(Date, nullable=True)
     password = Column(String, nullable=False)
+    role = Column(SqlEnum(UserRole), nullable=False, default=UserRole.USER)
 
 
 # Pydantic model for user profile.

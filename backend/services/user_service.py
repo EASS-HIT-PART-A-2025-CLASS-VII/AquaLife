@@ -1,11 +1,10 @@
-# services/user_service.py
-
 from sqlalchemy.orm import Session
 from models.user_model import User
 from repositories.user_repository import UserRepository
 from security.hashing import hash_password, verify_password
 from security.auth import create_access_token
 from fastapi import HTTPException
+from typing import List
 
 # Constant for "User not found" message
 USER_NOT_FOUND = "User not found"
@@ -37,7 +36,7 @@ class UserService:
 
         return new_user  # Return the created user instance
     
-    # Get User 
+    # Get User by ID 
     @staticmethod
     def get_user_by_id(user_id: int, db: Session):
         # Retrieve the user from the database by ID
@@ -45,6 +44,11 @@ class UserService:
         if not user:
             raise HTTPException(status_code=404, detail=USER_NOT_FOUND)
         return user  # Return the found user
+
+    # Get all users
+    @staticmethod
+    def get_all_users(db: Session) -> List[User]:
+        return db.query(User).all()
 
     # Verify User
     @staticmethod

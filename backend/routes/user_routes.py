@@ -1,10 +1,11 @@
-# routes/user_routes.py
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from db.db import get_db
 from models.user_model import UserCreate, UserProfile
 from services.user_service import UserService
+from security.dependencies import require_role
+
+
 
 router = APIRouter(
     prefix="/users",
@@ -17,12 +18,19 @@ def create_user(user_in: UserCreate, db: Session = Depends(get_db)):
     new_user = UserService.create_user(user_in, db)  # Call the service method
     return UserProfile.model_validate(new_user)
 
+
+
 # 🔍 Get a user by ID
 @router.get("/{user_id}", response_model=UserProfile)
 def get_user(user_id: int, db: Session = Depends(get_db)):
     user = UserService.get_user_by_id(user_id, db)  # Call the service method
     return UserProfile.model_validate(user)
 
+# 🔍 Get all users (only admins can see)
+@router.get("/", response_model=list[UserProfile], dependencies=[Depends(require_role("admin"))])
+def get_all_users(db: Session = Depends(get_db)):
+    users = UserService.get_all_users(db)
+    return [UserProfile.model_validate(user) for user in users]
 
 
 # 🔄 Update a user by ID
