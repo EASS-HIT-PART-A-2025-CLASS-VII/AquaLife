@@ -12,8 +12,6 @@ USER_NOT_FOUND = "User not found"
 
 class UserService:
 
-    
-
     # Create User 
     @staticmethod
     def create_user(user_in, db: Session):
