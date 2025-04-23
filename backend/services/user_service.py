@@ -7,7 +7,12 @@ from security.hashing import hash_password, verify_password
 from security.auth import create_access_token
 from fastapi import HTTPException
 
+# Constant for "User not found" message
+USER_NOT_FOUND = "User not found"
+
 class UserService:
+
+    
 
     # Create User 
     @staticmethod
@@ -40,7 +45,7 @@ class UserService:
         # Retrieve the user from the database by ID
         user = db.query(User).filter(User.id == user_id).first()
         if not user:
-            raise HTTPException(status_code=404, detail="User not found")
+            raise HTTPException(status_code=404, detail=USER_NOT_FOUND)
         return user  # Return the found user
 
     # Verify User
@@ -65,7 +70,7 @@ class UserService:
         # Retrieve the user from the database by ID
         user = db.query(User).filter(User.id == user_id).first()
         if not user:
-            raise HTTPException(status_code=404, detail="User not found")
+            raise HTTPException(status_code=404, detail=USER_NOT_FOUND)
 
         # Update user fields if provided
         if user_in.first_name:
@@ -93,7 +98,7 @@ class UserService:
         # Retrieve the user from the database by ID
         user = db.query(User).filter(User.id == user_id).first()
         if not user:
-            raise HTTPException(status_code=404, detail="User not found")
+            raise HTTPException(status_code=404, detail=USER_NOT_FOUND)
 
         # Delete the user from the database
         db.delete(user)
