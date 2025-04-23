@@ -25,6 +25,17 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
 
 
 
-# 1) SQLAlchemy retrieves the User from DB (user = db.query(...))
-# 2) Pydantic converts it to a response object (UserProfile.model_validate(user))
-# 3) FastAPI returns it as JSON to the client
+# 🔄 Update a user by ID
+@router.put("/{user_id}", response_model=UserProfile)
+def update_user(user_id: int, user_in: UserCreate, db: Session = Depends(get_db)):
+    # Call the update_user service method
+    updated_user = UserService.update_user(user_id, user_in, db)
+    return UserProfile.model_validate(updated_user)
+
+
+# 🗑️ Delete a user by ID
+@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_user(user_id: int, db: Session = Depends(get_db)):
+    # Call the delete_user service method
+    UserService.delete_user(user_id, db)
+    return {"detail": "User deleted successfully"}
