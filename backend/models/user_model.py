@@ -1,16 +1,9 @@
-from sqlalchemy import Column, Integer, String, Date, JSON, Enum as SqlEnum
-from db.base import Base
+from sqlalchemy import Column, Integer, String, Date, JSON
+from backend.db.base import Base
 from pydantic import BaseModel, ConfigDict, EmailStr
-from typing import Optional
-import enum
+from typing import Literal, Optional
+from datetime import date
 
-
-
-
-class UserRole(enum.Enum):
-    ADMIN = "admin"
-    USER = "user"
-    MODERATOR = "moderator"
 
 # SQLAlchemy model for define the actual table structure
 # This is what ORM uses to query, update, or delete from PostgreSQL
@@ -24,7 +17,7 @@ class User(Base):
     email = Column(String, unique=True, nullable=False)
     birthdate = Column(Date, nullable=True)
     password = Column(String, nullable=False)
-    role = Column(SqlEnum(UserRole), nullable=False, default=UserRole.USER)
+    role = Column(String, nullable=False, default="user")
 
 
 # Pydantic model for user profile.
@@ -39,8 +32,9 @@ class UserProfile(BaseModel):
     last_name: str
     username: str
     email: EmailStr
-    birthdate: Optional[str] = None
-
+    birthdate: date
+    role: str 
+    
     # This allows FastAPI to auto-convert SQLAlchemy models into Pydantic ones
     model_config = ConfigDict(from_attributes=True)
 
@@ -53,9 +47,27 @@ class UserCreate(BaseModel):
     email: EmailStr
     password: str
     birthdate: Optional[str] = None
+    role: Optional[Literal['admin', 'user', 'moderator']] = "user"
 
     # This allows FastAPI to auto-convert SQLAlchemy models into Pydantic ones
     model_config = ConfigDict(from_attributes=True)
+
+
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
+
+
+class TokenUserResponse(BaseModel):
+    access_token: str
+    token_type: str
+    id: int
+    first_name: str
+    last_name: str
+    username: str
+    email: str
+    birthdate: date
 
 
 

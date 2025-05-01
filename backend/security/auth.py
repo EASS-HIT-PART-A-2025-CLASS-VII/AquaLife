@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from jose import jwt
-from config import settings
+from backend.config import settings
 
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()

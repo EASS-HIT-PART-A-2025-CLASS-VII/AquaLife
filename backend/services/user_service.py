@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
-from models.user_model import User
-from repositories.user_repository import UserRepository
-from security.hashing import hash_password, verify_password
-from security.auth import create_access_token
+from backend.models.user_model import User
+from backend.repositories.user_repository import UserRepository
+from backend.security.hashing import hash_password, verify_password
+from backend.security.auth import create_access_token
 from fastapi import HTTPException
 from typing import List
 
@@ -14,22 +14,25 @@ class UserService:
     # Create User 
     @staticmethod
     def create_user(user_in, db: Session):
-
         # Check if username or email already exists
         if db.query(User).filter((User.username == user_in.username) | (User.email == user_in.email)).first():
             raise HTTPException(status_code=400, detail="Username or email already exists")
 
-        # Create the new User instance with hashed password
+        # Just use the role as a string directly
+        user_role = user_in.role if user_in.role else "user"  # Default to "user" if no role is provided
+
+        # Create the new User instance with hashed password and role
         new_user = User(
             first_name=user_in.first_name,
             last_name=user_in.last_name,
             username=user_in.username,
             email=user_in.email,
             birthdate=user_in.birthdate,
-            password=hash_password(user_in.password)  # Password hashing
+            password=hash_password(user_in.password),  # Password hashing
+            role=user_role  # Use the role directly as a string
         )
 
-        #Add the new user to the database, commit the transaction, and refresh the user object
+        # Add the new user to the database, commit the transaction, and refresh the user object
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
@@ -44,6 +47,11 @@ class UserService:
         if not user:
             raise HTTPException(status_code=404, detail=USER_NOT_FOUND)
         return user  # Return the found user
+
+    # Get User by Usernames
+    @staticmethod
+    def get_user_by_username(username: str, db: Session) -> User:
+        return db.query(User).filter(User.username == username).first()
 
     # Get all users
     @staticmethod

@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routes import user_routes
+from backend.routes import user_routes
 
 
 app = FastAPI()
