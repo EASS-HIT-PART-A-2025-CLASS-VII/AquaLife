@@ -14,9 +14,9 @@ class UserService:
     # Create User 
     @staticmethod
     def create_user(user_in, db: Session):
-        # Check if username or email already exists
-        if db.query(User).filter((User.username == user_in.username) | (User.email == user_in.email)).first():
-            raise HTTPException(status_code=400, detail="Username or email already exists")
+        # Check if email already exists
+        if db.query(User).filter(User.email == user_in.email).first():
+            raise HTTPException(status_code=400, detail="Email already exists")
 
         # Just use the role as a string directly
         user_role = user_in.role if user_in.role else "user"  # Default to "user" if no role is provided
@@ -25,7 +25,6 @@ class UserService:
         new_user = User(
             first_name=user_in.first_name,
             last_name=user_in.last_name,
-            username=user_in.username,
             email=user_in.email,
             birthdate=user_in.birthdate,
             password=hash_password(user_in.password),  # Password hashing
@@ -48,10 +47,10 @@ class UserService:
             raise HTTPException(status_code=404, detail=USER_NOT_FOUND)
         return user  # Return the found user
 
-    # Get User by Usernames
+    # Get User by Email
     @staticmethod
-    def get_user_by_username(username: str, db: Session) -> User:
-        return db.query(User).filter(User.username == username).first()
+    def get_user_by_email(email: str, db: Session) -> User:
+        return db.query(User).filter(User.email == email).first()
 
     # Get all users
     @staticmethod
@@ -72,7 +71,7 @@ class UserService:
             raise HTTPException(status_code=401, detail="Invalid credentials")
         
         # Create and return an access token
-        return create_access_token(data={"sub": user.username})
+        return create_access_token(data={"sub": user.email})
 
     # Update User
     @staticmethod
@@ -87,8 +86,6 @@ class UserService:
             user.first_name = user_in.first_name
         if user_in.last_name:
             user.last_name = user_in.last_name
-        if user_in.username:
-            user.username = user_in.username
         if user_in.email:
             user.email = user_in.email
         if user_in.birthdate:

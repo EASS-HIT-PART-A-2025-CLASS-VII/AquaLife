@@ -1,72 +1,49 @@
 import React from 'react';
-import { AquariumBackground } from '../components/AquariumBackground';
 import { LoginForm } from '../components/LoginForm';
-import { Logo } from '../components/Logo';
+import { AquariumBackground } from '../components/AquariumBackground';
 
-const LoginPage: React.FC = () => {
+export const LoginPage: React.FC = () => {
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-gray-100 overflow-hidden">
-      {/* Fish tank animated background */}
-      <div className="absolute inset-0 z-0">
+    <div className="relative min-h-screen bg-marine">
+      {/* Aquarium Background */}
+      <div className="fixed inset-0 z-0">
         <AquariumBackground />
       </div>
 
-      {/* Content overlay */}
-      <div className="relative z-10 flex flex-col min-h-screen w-full">
-        {/* Header */}
-        <header className="p-6">
-          <Logo />
-        </header>
-
-        {/* Main content */}
-        <main className="flex-1 flex items-center justify-center p-6">
-          <div className="w-full max-w-5xl flex flex-col lg:flex-row items-center gap-12">
-            {/* Hero section */}
-            <div className="lg:w-1/2 text-center lg:text-left space-y-6">
-              <h1 className="text-4xl lg:text-5xl font-bold text-white">
-                Design Your Perfect Aquatic World
-              </h1>
-              <p className="text-xl text-white/80">
-                Create, design, and manage your dream aquarium from scratch with AquaLife's powerful tools.
-              </p>
-              <div className="flex flex-wrap justify-center lg:justify-start gap-4">
-                <div className="glass-panel px-4 py-2 rounded-full flex items-center gap-2">
-                  <svg className="w-5 h-5 text-marine-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-white">Easy to use interface</span>
-                </div>
-                <div className="glass-panel px-4 py-2 rounded-full flex items-center gap-2">
-                  <svg className="w-5 h-5 text-marine-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-white">Realistic simulations</span>
-                </div>
-                <div className="glass-panel px-4 py-2 rounded-full flex items-center gap-2">
-                  <svg className="w-5 h-5 text-marine-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-white">Fish compatibility</span>
-                </div>
+      {/* Content */}
+      <div className="relative z-10 container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center min-h-[calc(100vh-4rem)]">
+          {/* Hero Section */}
+          <div className="text-white">
+            <h1 className="text-4xl font-bold mb-4">Welcome to AquaLife</h1>
+            <p className="text-lg mb-8 text-white/90">
+              Your all-in-one aquarium management solution. Design, monitor, and maintain your perfect underwater ecosystem.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-marine-light/30 backdrop-blur-sm p-4 rounded-lg border-2 border-white/50 shadow-lg">
+                <h3 className="font-bold mb-2 text-white text-lg">Smart Design</h3>
+                <p className="text-sm text-white/90">Create the perfect layout for your aquarium</p>
+              </div>
+              <div className="bg-marine-light/30 backdrop-blur-sm p-4 rounded-lg border-2 border-white/50 shadow-lg">
+                <h3 className="font-bold mb-2 text-white text-lg">Fish Compatibility</h3>
+                <p className="text-sm text-white/90">Ensure your fish live in harmony</p>
+              </div>
+              <div className="bg-marine-light/30 backdrop-blur-sm p-4 rounded-lg border-2 border-white/50 shadow-lg">
+                <h3 className="font-bold mb-2 text-white text-lg">Real-time Monitoring</h3>
+                <p className="text-sm text-white/90">Keep track of water parameters</p>
               </div>
             </div>
-
-            {/* Login form */}
-            <div className="lg:w-1/2">
-              <LoginForm />
-            </div>
           </div>
-        </main>
 
-        {/* Footer */}
-        <footer className="relative p-6 text-center">
-          <p className="text-white/60 text-sm">
-            © 2025 AquaLife - Aquarium Design & Management Tool
-          </p>
-        </footer>
+          {/* Login Form */}
+          <div>
+            <LoginForm />
+          </div>
+        </div>
       </div>
+      <footer className="relative z-10 text-center text-white/70 py-4">
+        <p>&copy; 2025 AquaLife. All rights reserved.</p>
+      </footer>
     </div>
   );
 };
-
-export default LoginPage;

@@ -1,4 +1,7 @@
 from pydantic_settings import BaseSettings
+import logging
+
+logger = logging.getLogger(__name__)
 
 class Settings(BaseSettings):
     DATABASE_URL: str
@@ -11,5 +14,10 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = ".env"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        logger.debug(f"Loaded GOOGLE_CLIENT_ID: {self.GOOGLE_CLIENT_ID[:10]}...")
+        logger.debug(f"Loaded GOOGLE_REDIRECT_URI: {self.GOOGLE_REDIRECT_URI}")
 
 settings = Settings()

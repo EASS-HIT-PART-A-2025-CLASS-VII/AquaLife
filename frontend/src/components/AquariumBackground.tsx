@@ -1,89 +1,164 @@
-import React from 'react';
-import { Fish } from './Fish';
-import { Bubble } from './Bubble';
+import React, { useEffect, useRef } from 'react';
+
+interface Fish {
+  x: number;
+  y: number;
+  speed: number;
+  direction: number;
+  size: number;
+  color: string;
+}
 
 export const AquariumBackground: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const fishesRef = useRef<Fish[]>([]);
+  const animationFrameRef = useRef<number>();
+
+  useEffect(() => {
+    console.log('AquariumBackground mounted');
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      console.error('Canvas not found');
+      return;
+    }
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      console.error('Could not get canvas context');
+      return;
+    }
+
+    // Set canvas size
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      console.log('Canvas resized:', canvas.width, canvas.height);
+    };
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Create initial fish
+    const createFish = (): Fish => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      speed: 2 + Math.random() * 3,
+      direction: Math.random() * Math.PI * 2,
+      size: 30 + Math.random() * 40,
+      color: `hsl(${Math.random() * 60 + 180}, 80%, 60%)`,
+    });
+
+    // Initialize fish
+    fishesRef.current = Array.from({ length: 15 }, createFish);
+    console.log('Fish created:', fishesRef.current.length);
+
+    // Animation loop
+    const animate = () => {
+      if (!ctx || !canvas) return;
+
+      // Clear canvas with gradient
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, '#60a5fa'); // Surface water
+      gradient.addColorStop(0.5, '#3b82f6'); // Middle water
+      gradient.addColorStop(1, '#1e3a8a'); // Deep water
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Add some bubbles
+      for (let i = 0; i < 5; i++) {
+        const x = Math.random() * canvas.width;
+        const y = (canvas.height + Math.random() * 100) % canvas.height;
+        const size = 2 + Math.random() * 4;
+        
+        ctx.beginPath();
+        ctx.arc(x, y, size, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.fill();
+      }
+
+      // Update and draw fish
+      fishesRef.current.forEach((fish) => {
+        // Update position
+        fish.x += Math.cos(fish.direction) * fish.speed;
+        fish.y += Math.sin(fish.direction) * fish.speed;
+
+        // Bounce off walls with smoother transitions
+        if (fish.x < 0) {
+          fish.x = 0;
+          fish.direction = Math.PI - fish.direction + (Math.random() - 0.5) * 0.5;
+        } else if (fish.x > canvas.width) {
+          fish.x = canvas.width;
+          fish.direction = Math.PI - fish.direction + (Math.random() - 0.5) * 0.5;
+        }
+        if (fish.y < 0) {
+          fish.y = 0;
+          fish.direction = -fish.direction + (Math.random() - 0.5) * 0.5;
+        } else if (fish.y > canvas.height) {
+          fish.y = canvas.height;
+          fish.direction = -fish.direction + (Math.random() - 0.5) * 0.5;
+        }
+
+        // Random direction changes
+        if (Math.random() < 0.02) {
+          fish.direction += (Math.random() - 0.5) * 0.5;
+        }
+
+        // Draw fish
+        ctx.save();
+        ctx.translate(fish.x, fish.y);
+        ctx.rotate(fish.direction);
+        
+        // Fish body
+        ctx.beginPath();
+        ctx.fillStyle = fish.color;
+        ctx.ellipse(0, 0, fish.size, fish.size / 2, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Add shine effect
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.ellipse(fish.size / 4, -fish.size / 4, fish.size / 8, fish.size / 16, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Tail
+        ctx.beginPath();
+        ctx.moveTo(-fish.size, 0);
+        ctx.lineTo(-fish.size - 15, -fish.size / 2);
+        ctx.lineTo(-fish.size - 15, fish.size / 2);
+        ctx.closePath();
+        ctx.fill();
+
+        // Eye
+        ctx.beginPath();
+        ctx.fillStyle = 'white';
+        ctx.arc(fish.size / 2, -fish.size / 4, fish.size / 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.fillStyle = 'black';
+        ctx.arc(fish.size / 2, -fish.size / 4, fish.size / 16, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      });
+
+      animationFrameRef.current = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      console.log('AquariumBackground unmounting');
+      window.removeEventListener('resize', resizeCanvas);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <div className="fixed inset-0 overflow-hidden aquarium-gradient">
-      {/* Decorations */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-amber-900/70 to-transparent" />
-      
-      {/* Plants */}
-      <div className="absolute bottom-0 left-1/4 w-20 h-32 bg-green-800/80 rounded-t-full" />
-      <div className="absolute bottom-0 left-1/4 ml-4 w-12 h-40 bg-green-700/80 rounded-t-full" />
-      
-      <div className="absolute bottom-0 right-1/4 w-16 h-48 bg-emerald-800/80 rounded-t-full" />
-      <div className="absolute bottom-0 right-1/4 mr-6 w-10 h-36 bg-emerald-700/80 rounded-t-full" />
-      
-      {/* Rocks */}
-      <div className="absolute bottom-0 left-10 w-20 h-16 bg-gray-700/80 rounded-t-full" />
-      <div className="absolute bottom-0 right-20 w-24 h-12 bg-slate-600/80 rounded-t-full" />
-      
-      {/* Fish */}
-      <Fish 
-        type="clown" 
-        direction="right" 
-        speed="medium" 
-        style={{ top: '20%', left: '10%' }}
-      />
-      
-      <Fish 
-        type="blue" 
-        direction="left" 
-        speed="fast" 
-        style={{ top: '30%', right: '10%' }}
-      />
-      
-      <Fish 
-        type="yellow" 
-        direction="right" 
-        speed="slow" 
-        style={{ top: '50%', left: '20%' }}
-      />
-      
-      <Fish 
-        type="angelfish" 
-        direction="right" 
-        speed="slow" 
-        style={{ top: '15%', left: '40%' }}
-        className="animate-float-up-down"
-      />
-      
-      <Fish 
-        type="blue" 
-        direction="left" 
-        speed="medium" 
-        style={{ top: '60%', right: '15%' }}
-      />
-      
-      <Fish 
-        type="clown" 
-        direction="left" 
-        speed="medium" 
-        style={{ top: '40%', right: '25%' }}
-        className="animate-float-up-down"
-      />
-      
-      <Fish 
-        type="yellow" 
-        direction="right" 
-        speed="fast" 
-        style={{ top: '70%', left: '30%' }}
-      />
-      
-      {/* Bubbles */}
-      <Bubble size="small" speed="fast" style={{ bottom: '0%', left: '20%' }} />
-      <Bubble size="medium" speed="medium" style={{ bottom: '5%', left: '25%' }} />
-      <Bubble size="small" speed="medium" style={{ bottom: '0%', left: '30%' }} />
-      <Bubble size="large" speed="slow" style={{ bottom: '0%', left: '40%' }} />
-      
-      <Bubble size="small" speed="fast" style={{ bottom: '0%', right: '15%' }} />
-      <Bubble size="medium" speed="medium" style={{ bottom: '8%', right: '20%' }} />
-      <Bubble size="small" speed="slow" style={{ bottom: '0%', right: '25%' }} />
-      <Bubble size="large" speed="slow" style={{ bottom: '0%', right: '30%' }} />
-      
-      {/* Overlay to create water effect */}
-      <div className="absolute inset-0 bg-blue-900/10 backdrop-blur-[1px]" />
-    </div>
+    <canvas
+      ref={canvasRef}
+      className="fixed top-0 left-0 w-full h-full"
+      style={{ zIndex: -1 }}
+    />
   );
-};
+}; 
