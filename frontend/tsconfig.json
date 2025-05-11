@@ -1,25 +1,29 @@
 {
   "compilerOptions": {
-    "target": "es6",                   // Target modern JavaScript, change from 'es5' to 'es6' or 'esnext' if needed
-    "lib": ["dom", "es6", "esnext"],    // Add 'esnext' to cover modern JavaScript features
-    "module": "esnext",                 // Use 'esnext' for modern modules
-    "moduleResolution": "node",         // This is fine for Node-style module resolution
-    "strict": true,                     // Enable strict type-checking options (recommended)
-    "esModuleInterop": true,            // Required for compatibility with CommonJS modules
-    "skipLibCheck": true,               // Skip library checks (useful to avoid type-checking issues in dependencies)
-    "types": ["node"],                  // Ensure Node types are included
-    "jsx": "react-jsx",                 // Required for React 17 JSX transformation
-    "baseUrl": "src",                   // Keep 'src' as the base directory for module resolution
+    "target": "esnext",
+    "lib": ["dom", "es6", "esnext"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "jsx": "react-jsx",
+    "baseUrl": "src",
+    "allowJs": true,
+    "checkJs": false,
+    "noEmit": true, // ✅ prevent TypeScript from writing files
+    "types": ["node"],
     "paths": {
-      "@/*": ["./*"],                   // Allow '@' to refer to the 'src' folder
-      "@lib/*": ["./lib/*"]             // Allow '@lib' to refer to 'src/lib'
+      "@/*": ["./*"],
+      "@lib/*": ["./lib/*"]
     }
   },
   "include": [
-    "src/**/*"                           // Include all files in your src folder
+    "src/**/*",
+    "**/*.js"
   ],
   "exclude": [
-    "node_modules",                      // Exclude node_modules to avoid checking dependencies
-    "build"                              // Optionally exclude the build directory if generated
+    "node_modules",
+    "build"
   ]
 }

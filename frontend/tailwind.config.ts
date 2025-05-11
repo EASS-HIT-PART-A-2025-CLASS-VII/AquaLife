@@ -4,11 +4,24 @@ import tailwindcssAnimate from "tailwindcss-animate";
 export default {
 	darkMode: ["class"],
 	content: [
-		"./pages/**/*.{ts,tsx}",
-		"./components/**/*.{ts,tsx}",
-		"./app/**/*.{ts,tsx}",
-		"./src/**/*.{ts,tsx}",
-	],
+		"./src/pages/**/*.{js,ts,tsx}",
+		"./src/components/**/*.{js,ts,tsx}",
+		"./src/app/**/*.{js,ts,tsx}",
+		"./src/**/*.{js,ts,tsx}",
+	  ],
+
+	  safelist: [
+		'animate-bubble-rise',
+		'animate-float-up-down',
+		'animate-swim-left-right',
+		'animate-swim-right-left',
+		'animation-duration-[8s]',
+		'animation-duration-[10s]',
+		'animation-duration-[15s]',
+		'animation-duration-[25s]',
+	  ],
+	
+	  
 	prefix: "",
 	theme: {
 		container: {
@@ -64,6 +77,12 @@ export default {
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
 			},
+			animationDuration: {
+				'8s': '8s',
+				'10s': '10s',
+				'15s': '15s',
+				'25s': '25s',
+			  },
 			keyframes: {
 				'accordion-down': {
 					from: {

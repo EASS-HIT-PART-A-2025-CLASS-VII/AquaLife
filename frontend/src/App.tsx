@@ -1,10 +1,10 @@
 import React from 'react';
-import Index from './pages/index'; // your main login page
+import LoginPage from './pages/LoginPage'; // your main login page
 
 
 
 function App() {
-  return <Index />;
+  return <LoginPage />;
 }
 
 export default App;
