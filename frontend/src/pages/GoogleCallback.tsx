@@ -16,9 +16,12 @@ export function GoogleCallback() {
         
         if (data) {
           // If we have data, parse it and store it
-          const parsedData = JSON.parse(data);
+          const parsedData = JSON.parse(decodeURIComponent(data));
+          console.log('Received data:', data);
           console.log('Storing token and user data...');
+          console.time('login');
           login(parsedData.access_token, parsedData.user);
+          console.timeEnd('login');
           console.log('Redirecting to dashboard...');
           navigate('/dashboard');
           return;

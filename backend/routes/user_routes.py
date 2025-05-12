@@ -11,6 +11,7 @@ import logging
 from fastapi.responses import RedirectResponse
 import urllib.parse
 import json
+from backend.config import settings
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -39,7 +40,7 @@ async def google_auth_callback(code: str = None, data: str = None, db: Session =
         # If we have data, this is the redirect from our backend
         if data:
             # Redirect to the frontend with the data
-            return RedirectResponse(url=f"http://localhost/auth/google/callback?data={data}")
+            return RedirectResponse(url=f"{settings.FRONTEND_URL}/auth/google/callback?data={encoded_data}")
 
         # Otherwise, this is the initial callback from Google
         logger.debug(f"Received callback with code: {code}")
@@ -100,7 +101,7 @@ async def google_auth_callback(code: str = None, data: str = None, db: Session =
         encoded_data = urllib.parse.quote(json_data)
         
         # Redirect to the frontend with the data
-        return RedirectResponse(url=f"http://localhost/auth/google/callback?data={encoded_data}")
+        return RedirectResponse(url=f"{settings.FRONTEND_URL}/auth/google/callback?data={encoded_data}")
 
     except Exception as e:
         logger.error(f"Google auth error: {str(e)}")
