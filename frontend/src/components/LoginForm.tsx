@@ -60,7 +60,7 @@ export function LoginForm() {
     <Card className="w-[350px] bg-marine-light/30 border-2 border-marine-light/50 shadow-lg">
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-white">Welcome Back</CardTitle>
-        <CardDescription className="text-marine-light">
+        <CardDescription className="text-sm font-medium text-white">
           Enter your credentials to access your account
         </CardDescription>
       </CardHeader>

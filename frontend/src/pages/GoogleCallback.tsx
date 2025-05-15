@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { API_URL } from '../config';
@@ -7,9 +7,11 @@ export function GoogleCallback() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { login } = useAuth();
+  const hasNavigated = useRef(false);
 
   useEffect(() => {
     const handleCallback = async () => {
+      if (hasNavigated.current) return;
       try {
         const code = searchParams.get('code');
         const data = searchParams.get('data');
@@ -23,7 +25,8 @@ export function GoogleCallback() {
           login(parsedData.access_token, parsedData.user);
           console.timeEnd('login');
           console.log('Redirecting to dashboard...');
-          navigate('/dashboard');
+          hasNavigated.current = true;
+          navigate('/dashboard', { replace: true });
           return;
         }
 
@@ -44,14 +47,19 @@ export function GoogleCallback() {
         // Store the token and user data
         login(responseData.access_token, responseData.user);
         console.log('Redirecting to dashboard...');
-        navigate('/dashboard');
+        hasNavigated.current = true;
+        navigate('/dashboard', { replace: true });
       } catch (error) {
-        console.error('Google callback error:', error);
-        navigate('/login');
+        if (!hasNavigated.current) {
+          hasNavigated.current = true;
+          console.error('Google callback error:', error);
+          navigate('/login', { replace: true });
+        }
       }
     };
 
     handleCallback();
+    // eslint-disable-next-line
   }, [searchParams, login, navigate]);
 
   return (

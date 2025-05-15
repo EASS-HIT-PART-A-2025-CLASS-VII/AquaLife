@@ -22,7 +22,7 @@ app.add_middleware(
 
 
 # Mount the user routes using `include_router` to register the endpoints
-app.include_router(user_routes.router)
+app.include_router(user_routes.router, prefix="/api")
 
 
 
