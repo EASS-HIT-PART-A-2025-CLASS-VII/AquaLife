@@ -10,6 +10,8 @@ services:
       - aqualife-network
     depends_on:
       - fastapi-backend
+    environment:
+      - COMPOSE_BAKE=true
 
   fastapi-backend:
     build:
@@ -24,7 +26,8 @@ services:
       - postgres
     env_file:  
       - .env
-
+    environment:
+      - COMPOSE_BAKE=true
 
   postgres:
     image: postgres:13
