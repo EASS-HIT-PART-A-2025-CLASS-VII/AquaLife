@@ -279,69 +279,6 @@ export const AquariumBackground: React.FC = () => {
     setIsDaytime(!isDaytime);
   };
 
-  const createRepelEffect = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const state = stateRef.current;
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const maxDimension = Math.max(canvas.width, canvas.height);
-
-    // Create a massive central ripple that covers the entire screen
-    const mainRipple = createRipple(centerX, centerY);
-    mainRipple.radius = 0;
-    mainRipple.maxRadius = maxDimension * 2;
-    mainRipple.speed = 10;
-    mainRipple.opacity = 0.9;
-    state.ripples.push(mainRipple);
-
-    // Create a ring of ripples that expand outward
-    for (let i = 0; i < 12; i++) {
-      const angle = (i / 12) * Math.PI * 2;
-      const distance = 40 + i * 30;
-      const x = centerX + Math.cos(angle) * distance;
-      const y = centerY + Math.sin(angle) * distance;
-      const ripple = createRipple(x, y);
-      ripple.radius = 0;
-      ripple.maxRadius = maxDimension * 2.5;
-      ripple.speed = 8 + i * 0.3;
-      ripple.opacity = 0.7 - (i * 0.04);
-      state.ripples.push(ripple);
-    }
-
-    // Create additional ripples in a spiral pattern
-    for (let i = 0; i < 16; i++) {
-      const angle = (i / 16) * Math.PI * 6;
-      const distance = 50 + i * 25;
-      const x = centerX + Math.cos(angle) * distance;
-      const y = centerY + Math.sin(angle) * distance;
-      const ripple = createRipple(x, y);
-      ripple.radius = 0;
-      ripple.maxRadius = maxDimension * 2.2;
-      ripple.speed = 9;
-      ripple.opacity = 0.5;
-      state.ripples.push(ripple);
-    }
-
-    // Create corner ripples for full coverage
-    const corners = [
-      { x: 0, y: 0 },
-      { x: canvas.width, y: 0 },
-      { x: 0, y: canvas.height },
-      { x: canvas.width, y: canvas.height }
-    ];
-
-    corners.forEach(corner => {
-      const ripple = createRipple(corner.x, corner.y);
-      ripple.radius = 0;
-      ripple.maxRadius = maxDimension * 2;
-      ripple.speed = 7;
-      ripple.opacity = 0.6;
-      state.ripples.push(ripple);
-    });
-  };
-
   return (
     <div style={{ 
       position: 'fixed', 
@@ -392,43 +329,6 @@ export const AquariumBackground: React.FC = () => {
           transform: 'translateY(0)',
           transition: 'transform 0.3s ease'
         }}>
-          <button
-            onClick={createRepelEffect}
-            style={{
-              padding: '0.5rem',
-              borderRadius: '9999px',
-              backgroundColor: 'rgba(255, 255, 255, 0.2)',
-              transition: 'all 0.3s ease',
-              border: 'none',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              minWidth: '2.5rem',
-              minHeight: '2.5rem',
-              position: 'relative'
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
-              e.currentTarget.style.transform = 'scale(1.1)';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-              e.currentTarget.style.transform = 'scale(1)';
-            }}
-            onFocus={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
-              e.currentTarget.style.transform = 'scale(1.1)';
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-              e.currentTarget.style.transform = 'scale(1)';
-            }}
-          >
-            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ pointerEvents: 'none' }}>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-          </button>
           <button
             onClick={toggleDayNight}
             style={{
