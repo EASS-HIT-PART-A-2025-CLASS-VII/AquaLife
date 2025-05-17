@@ -1,13 +1,13 @@
 from pydantic import BaseModel, EmailStr
 from typing import List, Optional
 
-
 class FishEntry(BaseModel):
     name: str
     quantity: int
 
-class AquariumLayout(BaseModel):
+class AquariumLayoutRequest(BaseModel):
     owner_email: EmailStr
+    tank_name: str
     tank_length: int
     tank_width: int
     tank_height: int

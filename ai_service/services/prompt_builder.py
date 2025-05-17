@@ -1,9 +1,11 @@
-def build_prompt(layout):
+from ai_service.models.ai_model import AquariumLayoutRequest
+
+def build_prompt(layout: AquariumLayoutRequest) -> str:
     """
     Build a prompt for the AI model based on the aquarium layout.
     
     Args:
-        layout: AquariumLayout model containing all aquarium details
+        layout: AquariumLayoutRequest model containing all aquarium details
         
     Returns:
         str: Formatted prompt string

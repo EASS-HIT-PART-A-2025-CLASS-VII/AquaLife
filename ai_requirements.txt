@@ -1,9 +1,9 @@
 # FastAPI and Uvicorn for AI Service
-fastapi>=0.68.0
-uvicorn>=0.15.0
+fastapi==0.110.0
+uvicorn==0.27.1
 
 # OpenAI library
-openai>=1.0.0
+openai==1.12.0
 
 # Optional: Dependencies for Async operations
 httpx==0.27.0
@@ -15,8 +15,8 @@ python-dotenv>=0.19.0
 email-validator==2.1.0.post1
 
 # Pydantic settings
-pydantic-settings>=2.0.0
+pydantic-settings==2.2.1
 
 # Testing
-pytest>=7.0.0
-pytest-asyncio>=0.23.0
+pytest==8.3.5
+pytest-asyncio==0.23.5

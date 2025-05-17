@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import Mock, patch
-from models.ai_model import FishSelection, AquariumLayout, AIResponse
-from services.aqua_service import generate_aquarium_advice, AquariumServiceError, OpenAIError, ValidationError
+from ai_service.models.ai_model import AquariumLayoutRequest, FishEntry, AIResponse
+from ai_service.services.aqua_service import evaluate_aquarium_layout, OpenAIError, ValidationError
 
 # Test data
 SAMPLE_FISH_CATALOG = [
@@ -48,50 +48,41 @@ def mock_openai_response():
     )
 
 @pytest.fixture
-def sample_fish_selection():
-    return FishSelection(
-        tank_dimensions=[60, 30, 40],
-        water_type="freshwater",
-        fish_list=["Neon Tetra"]
-    )
-
-@pytest.fixture
 def sample_aquarium_layout():
-    return AquariumLayout(**SAMPLE_AQUARIUM_LAYOUT)
+    return AquariumLayoutRequest(**SAMPLE_AQUARIUM_LAYOUT)
 
 class TestFishCatalog:
     def test_create_fish_entry(self):
         """Test creating a new fish entry in the catalog"""
-        fish_entry = SAMPLE_FISH_CATALOG[0]
+        fish_entry = FishEntry(name="Neon Tetra", quantity=6)
         
-        assert fish_entry["name"] == "Neon Tetra"
-        assert fish_entry["image_url"] == "https://example.com/fish/neon-tetra.jpg"
-        assert len(fish_entry.keys()) == 2  # Only name and image_url should be present
+        assert fish_entry.name == "Neon Tetra"
+        assert fish_entry.quantity == 6
 
-    def test_fish_catalog_structure(self):
-        """Test fish catalog table structure"""
-        for fish in SAMPLE_FISH_CATALOG:
-            assert "name" in fish
-            assert "image_url" in fish
-            assert len(fish.keys()) == 2  # Only name and image_url should be present
+    def test_fish_entry_structure(self):
+        """Test fish entry structure"""
+        fish_entry = FishEntry(name="Neon Tetra", quantity=6)
+        assert hasattr(fish_entry, "name")
+        assert hasattr(fish_entry, "quantity")
 
 class TestAquariumLayout:
     def test_create_aquarium_layout(self):
         """Test creating a new aquarium layout"""
-        layout = SAMPLE_AQUARIUM_LAYOUT
+        layout = AquariumLayoutRequest(**SAMPLE_AQUARIUM_LAYOUT)
         
-        assert layout["owner_email"] == "user@example.com"
-        assert layout["tank_name"] == "My First Aquarium"
-        assert layout["tank_length"] == 60
-        assert layout["tank_width"] == 30
-        assert layout["tank_height"] == 40
-        assert layout["water_type"] == "freshwater"
-        assert layout["fish_data"][0]["name"] == "Neon Tetra"
-        assert layout["fish_data"][0]["quantity"] == 6
-        assert layout["comments"] == "My first aquarium setup with peaceful community fish"
+        assert layout.owner_email == "user@example.com"
+        assert layout.tank_name == "My First Aquarium"
+        assert layout.tank_length == 60
+        assert layout.tank_width == 30
+        assert layout.tank_height == 40
+        assert layout.water_type == "freshwater"
+        assert layout.fish_data[0].name == "Neon Tetra"
+        assert layout.fish_data[0].quantity == 6
+        assert layout.comments == "My first aquarium setup with peaceful community fish"
 
     def test_aquarium_layout_structure(self):
-        """Test aquarium layout table structure"""
+        """Test aquarium layout structure"""
+        layout = AquariumLayoutRequest(**SAMPLE_AQUARIUM_LAYOUT)
         required_fields = [
             "owner_email",
             "tank_name",
@@ -103,14 +94,15 @@ class TestAquariumLayout:
             "comments"
         ]
         for field in required_fields:
-            assert field in SAMPLE_AQUARIUM_LAYOUT
+            assert hasattr(layout, field)
 
     def test_fish_data_structure(self):
         """Test fish data structure in aquarium layout"""
-        fish_data = SAMPLE_AQUARIUM_LAYOUT["fish_data"][0]
-        assert "name" in fish_data
-        assert "quantity" in fish_data
-        assert len(fish_data.keys()) == 2
+        layout = AquariumLayoutRequest(**SAMPLE_AQUARIUM_LAYOUT)
+        fish_data = layout.fish_data[0]
+        assert isinstance(fish_data, FishEntry)
+        assert hasattr(fish_data, "name")
+        assert hasattr(fish_data, "quantity")
 
 class TestAIService:
     @patch('openai.chat.completions.create')
@@ -118,7 +110,7 @@ class TestAIService:
         """Test initial fish recommendation from AI"""
         mock_create.return_value = mock_openai_response
         
-        response = await generate_aquarium_advice(sample_aquarium_layout)
+        response = await evaluate_aquarium_layout(sample_aquarium_layout)
         
         # Verify the correct data is sent to OpenAI
         mock_create.assert_called_once()
@@ -145,10 +137,10 @@ class TestAIService:
         """Test adding more fish to the aquarium"""
         # First request
         mock_create.return_value = mock_openai_response
-        await generate_aquarium_advice(sample_aquarium_layout)
+        await evaluate_aquarium_layout(sample_aquarium_layout)
         
         # Add more fish
-        sample_aquarium_layout.fish_data.append({"name": "Betta Fish", "quantity": 1})
+        sample_aquarium_layout.fish_data.append(FishEntry(name="Betta Fish", quantity=1))
         mock_create.return_value = Mock(
             choices=[
                 Mock(
@@ -159,7 +151,7 @@ class TestAIService:
             ]
         )
         
-        updated_response = await generate_aquarium_advice(sample_aquarium_layout)
+        updated_response = await evaluate_aquarium_layout(sample_aquarium_layout)
         
         # Verify the correct data is sent in the second call
         assert mock_create.call_count == 2
@@ -176,35 +168,35 @@ class TestAIService:
 
     async def test_invalid_tank_dimensions(self):
         """Test validation of tank dimensions"""
-        invalid_layout = AquariumLayout(
+        invalid_layout = AquariumLayoutRequest(
             owner_email="user@example.com",
             tank_name="Invalid Tank",
             tank_length=0,  # Invalid length
             tank_width=30,
             tank_height=40,
             water_type="freshwater",
-            fish_data=[{"name": "Neon Tetra", "quantity": 6}]
+            fish_data=[FishEntry(name="Neon Tetra", quantity=6)]
         )
         
         with pytest.raises(ValidationError) as exc_info:
-            await generate_aquarium_advice(invalid_layout)
+            await evaluate_aquarium_layout(invalid_layout)
         
         assert "Tank dimensions must be provided" in str(exc_info.value)
 
     async def test_invalid_water_type(self):
         """Test validation of water type"""
-        invalid_layout = AquariumLayout(
+        invalid_layout = AquariumLayoutRequest(
             owner_email="user@example.com",
             tank_name="Invalid Tank",
             tank_length=60,
             tank_width=30,
             tank_height=40,
             water_type="brackish",  # Invalid water type
-            fish_data=[{"name": "Neon Tetra", "quantity": 6}]
+            fish_data=[FishEntry(name="Neon Tetra", quantity=6)]
         )
         
         with pytest.raises(ValidationError) as exc_info:
-            await generate_aquarium_advice(invalid_layout)
+            await evaluate_aquarium_layout(invalid_layout)
         
         assert "Water type must be either 'freshwater' or 'saltwater'" in str(exc_info.value)
 
@@ -214,7 +206,7 @@ class TestAIService:
         mock_create.side_effect = Exception("API Error")
         
         with pytest.raises(OpenAIError) as exc_info:
-            await generate_aquarium_advice(sample_aquarium_layout)
+            await evaluate_aquarium_layout(sample_aquarium_layout)
         
         assert "Error communicating with OpenAI API" in str(exc_info.value)
 
@@ -231,10 +223,10 @@ class TestAIService:
                 )
             ]
         )
-        await generate_aquarium_advice(sample_aquarium_layout)
+        await evaluate_aquarium_layout(sample_aquarium_layout)
         
         # Add more fish
-        sample_aquarium_layout.fish_data.append({"name": "Clownfish", "quantity": 1})
+        sample_aquarium_layout.fish_data.append(FishEntry(name="Clownfish", quantity=1))
         mock_create.return_value = Mock(
             choices=[
                 Mock(
@@ -245,7 +237,7 @@ class TestAIService:
             ]
         )
         
-        updated_response = await generate_aquarium_advice(sample_aquarium_layout)
+        updated_response = await evaluate_aquarium_layout(sample_aquarium_layout)
         
         # Verify the correct data is sent in both calls
         assert mock_create.call_count == 2

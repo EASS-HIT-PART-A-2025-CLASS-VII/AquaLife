@@ -1,14 +1,12 @@
 import openai
 import logging
 from .prompt_builder import build_prompt
-from dotenv import load_dotenv
 from ai_service.config import settings
-from ai_service.models.ai_model import AquariumLayout, AIResponse
+from ai_service.models.ai_model import AquariumLayoutRequest, AIResponse
 
 # Configure logging
 logger = logging.getLogger(__name__)
 
-load_dotenv()
 openai.api_key = settings.OPENAI_API_KEY
 openai.base_url = settings.OPENAI_API_BASE
 
@@ -35,12 +33,12 @@ class ValidationError(AquariumServiceError):
     """Exception for input validation errors"""
     pass
 
-async def evaluate_aquarium_layout(layout: AquariumLayout) -> AIResponse:
+async def evaluate_aquarium_layout(layout: AquariumLayoutRequest) -> AIResponse:
     """
     Evaluate an aquarium layout and provide AI advice.
     
     Args:
-        layout: AquariumLayout model containing all aquarium details
+        layout: AquariumLayoutRequest model containing all aquarium details
         
     Returns:
         AIResponse containing the AI's evaluation
