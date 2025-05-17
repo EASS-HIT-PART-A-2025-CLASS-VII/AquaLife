@@ -8,8 +8,10 @@ services:
       - "80:80"
     networks:
       - aqualife-network
+      - ai_network
     depends_on:
       - fastapi-backend
+      - ai-service
     environment:
       - COMPOSE_BAKE=true
 
@@ -43,15 +45,27 @@ services:
     networks:
       - aqualife-network
 
-  llm-service:
-    image: alpine
-    container_name: llm-service
-    command: sh -c "echo 'LLM service not yet implemented' && sleep infinity"
+  ai-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.aiService
+    container_name: ai-service
+    ports:
+      - "8001:8001"
     networks:
-      - aqualife-network
+      - ai_network
+    env_file:
+      - .env
+    environment:
+      - COMPOSE_BAKE=true
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-3.5-turbo}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
 
 networks:
   aqualife-network:
+    driver: bridge
+  ai_network:
     driver: bridge
 
 volumes:

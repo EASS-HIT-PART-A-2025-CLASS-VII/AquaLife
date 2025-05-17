@@ -1,0 +1,22 @@
+# FastAPI and Uvicorn for AI Service
+fastapi>=0.68.0
+uvicorn>=0.15.0
+
+# OpenAI library
+openai>=1.0.0
+
+# Optional: Dependencies for Async operations
+httpx==0.27.0
+
+# If you're handling environment variables (for secret keys)
+python-dotenv>=0.19.0
+
+# Email validation for Pydantic
+email-validator==2.1.0.post1
+
+# Pydantic settings
+pydantic-settings>=2.0.0
+
+# Testing
+pytest>=7.0.0
+pytest-asyncio>=0.23.0
