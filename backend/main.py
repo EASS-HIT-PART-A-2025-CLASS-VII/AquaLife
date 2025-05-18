@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.routes import user_routes, fish_routes, aquarium_routes, ai_routes
+from backend.routes import user_routes, fish_routes, aquarium_routes, ai_routes, tank_maintain_routes
 
 
 app = FastAPI()
@@ -27,6 +27,7 @@ app.include_router(user_routes.router, prefix="/api")
 app.include_router(fish_routes.router, prefix="/api")
 app.include_router(aquarium_routes.router, prefix="/api")
 app.include_router(ai_routes.router, prefix="/api")
+app.include_router(tank_maintain_routes.router, prefix="/api")
 
 
 

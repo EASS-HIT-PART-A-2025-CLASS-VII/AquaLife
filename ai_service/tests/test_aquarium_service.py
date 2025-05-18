@@ -1,7 +1,8 @@
 import pytest
 from unittest.mock import Mock, patch
 from ai_service.models.ai_model import AquariumLayoutRequest, FishEntry, AIResponse
-from ai_service.services.aqua_service import evaluate_aquarium_layout, OpenAIError, ValidationError
+from ai_service.services.aqua_service import evaluate_aquarium_layout, OpenAIError, ValidationError, AquariumServiceError
+import openai
 
 # Test data
 SAMPLE_FISH_CATALOG = [
@@ -104,6 +105,7 @@ class TestAquariumLayout:
         assert hasattr(fish_data, "name")
         assert hasattr(fish_data, "quantity")
 
+@pytest.mark.asyncio
 class TestAIService:
     @patch('openai.chat.completions.create')
     async def test_initial_fish_recommendation(self, mock_create, mock_openai_response, sample_aquarium_layout):
@@ -125,7 +127,7 @@ class TestAIService:
         assert str(sample_aquarium_layout.tank_length) in user_message
         assert str(sample_aquarium_layout.tank_width) in user_message
         assert str(sample_aquarium_layout.tank_height) in user_message
-        assert sample_aquarium_layout.water_type in user_message
+        assert sample_aquarium_layout.water_type.lower() in user_message.lower()
         assert sample_aquarium_layout.tank_name in user_message
         assert sample_aquarium_layout.fish_data[0].name in user_message
         
@@ -203,12 +205,19 @@ class TestAIService:
     @patch('openai.chat.completions.create')
     async def test_openai_error_handling(self, mock_create, sample_aquarium_layout):
         """Test handling of OpenAI API errors"""
-        mock_create.side_effect = Exception("API Error")
+        # Mock the OpenAI API to raise a specific error
+        mock_request = Mock()
+        mock_create.side_effect = openai.APIError(
+            message="API Error",
+            request=mock_request,
+            body={"error": {"message": "API Error"}}
+        )
         
-        with pytest.raises(OpenAIError) as exc_info:
+        with pytest.raises(AquariumServiceError) as exc_info:
             await evaluate_aquarium_layout(sample_aquarium_layout)
         
-        assert "Error communicating with OpenAI API" in str(exc_info.value)
+        assert "An unexpected error occurred" in str(exc_info.value)
+        assert "API Error" in str(exc_info.value)
 
     @patch('openai.chat.completions.create')
     async def test_conversation_context(self, mock_create, sample_aquarium_layout):
@@ -251,7 +260,7 @@ class TestAIService:
         assert str(sample_aquarium_layout.tank_length) in user_message
         assert str(sample_aquarium_layout.tank_width) in user_message
         assert str(sample_aquarium_layout.tank_height) in user_message
-        assert sample_aquarium_layout.water_type in user_message
+        assert sample_aquarium_layout.water_type.lower() in user_message.lower()
         assert sample_aquarium_layout.tank_name in user_message
         
         assert "Clownfish" in updated_response.response

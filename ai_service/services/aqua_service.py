@@ -79,7 +79,7 @@ async def evaluate_aquarium_layout(layout: AquariumLayoutRequest) -> AIResponse:
                 response=response.choices[0].message.content
             )
             
-        except openai.OpenAIError as e:
+        except Exception as e:
             logger.error(f"OpenAI API error: {str(e)}")
             raise OpenAIError(f"Error communicating with OpenAI API: {str(e)}")
             

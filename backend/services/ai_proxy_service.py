@@ -1,7 +1,7 @@
 import httpx
 from backend.models.aqualayout_model import AquaLayoutCreate
 
-AI_SERVICE_URL = "http://ai-service:8000/evaluate"  # docker-compose name
+AI_SERVICE_URL = "http://ai-service:8001/evaluate"  # docker-compose name
 
 async def evaluate_with_ai(layout: AquaLayoutCreate):
     async with httpx.AsyncClient() as client:

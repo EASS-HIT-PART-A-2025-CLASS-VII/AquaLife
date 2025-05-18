@@ -5,6 +5,8 @@ from backend.db.base import Base
 
 # ✅ Import model(s) so SQLAlchemy sees them
 from backend.models.user_model import User
+from backend.models.aqualayout_model import AquaLayout
+from backend.models.tank_maintain_model import TankMaintenance
 
 # Create the engine
 engine = create_engine(settings.DATABASE_URL, echo=True)

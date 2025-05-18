@@ -29,8 +29,8 @@ export const LoginPage: React.FC = () => {
                 <p className="text-sm text-white/90">Ensure your fish live in harmony</p>
               </div>
               <div className="bg-marine-light/30 backdrop-blur-sm p-4 rounded-lg border-2 border-white/50 shadow-lg">
-                <h3 className="font-bold mb-2 text-white text-lg">Real-time Monitoring</h3>
-                <p className="text-sm text-white/90">Keep track of water parameters</p>
+                <h3 className="font-bold mb-2 text-white text-lg">AI Assistance</h3>
+                <p className="text-sm text-white/90">Use AI to build the perfect tank!</p>
               </div>
             </div>
           </div>
