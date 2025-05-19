@@ -1,8 +1,8 @@
 import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from ai_service.routes import ai_routes
-from ai_service.config import settings
+from routes import ai_routes
+from config import settings
 
 # Configure logging
 logging.basicConfig(

@@ -1,7 +1,7 @@
 import logging
 from fastapi import APIRouter, HTTPException
-from ai_service.models.ai_model import AquariumLayout, AIResponse
-from ai_service.services.aqua_service import evaluate_aquarium_layout, AquariumServiceError, OpenAIError, ValidationError
+from models.ai_model import AquariumLayout, AIResponse
+from services.aqua_service import evaluate_aquarium_layout, AquariumServiceError, OpenAIError, ValidationError
 
 # Configure logging
 logger = logging.getLogger(__name__)

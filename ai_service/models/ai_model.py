@@ -5,7 +5,7 @@ class FishEntry(BaseModel):
     name: str
     quantity: int
 
-class AquariumLayoutRequest(BaseModel):
+class AquariumLayout(BaseModel):
     owner_email: EmailStr
     tank_name: str
     tank_length: int

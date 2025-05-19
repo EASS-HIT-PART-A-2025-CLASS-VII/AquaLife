@@ -1,8 +1,8 @@
 import openai
 import logging
 from .prompt_builder import build_prompt
-from ai_service.config import settings
-from ai_service.models.ai_model import AquariumLayoutRequest, AIResponse
+from config import settings
+from models.ai_model import AquariumLayout as AquariumLayoutRequest, AIResponse
 
 # Configure logging
 logger = logging.getLogger(__name__)

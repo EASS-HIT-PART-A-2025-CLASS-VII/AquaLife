@@ -1,4 +1,4 @@
-from ai_service.models.ai_model import AquariumLayoutRequest
+from models.ai_model import AquariumLayout as AquariumLayoutRequest
 
 def build_prompt(layout: AquariumLayoutRequest) -> str:
     """
