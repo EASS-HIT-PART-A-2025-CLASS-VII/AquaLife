@@ -21,6 +21,7 @@ def get_fish_by_name(fish_name: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail=FISH_NOT_FOUND)
     return fish
 
+
 @router.get("/{fish_id}", response_model=FishResponse)
 def get_fish(fish_id: int, db: Session = Depends(get_db)):
     fish = FishService(db).get_by_id(fish_id)

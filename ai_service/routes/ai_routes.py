@@ -1,6 +1,6 @@
 import logging
 from fastapi import APIRouter, HTTPException
-from ai_service.models.ai_model import AquariumLayoutRequest, AIResponse
+from ai_service.models.ai_model import AquariumLayout, AIResponse
 from ai_service.services.aqua_service import evaluate_aquarium_layout, AquariumServiceError, OpenAIError, ValidationError
 
 # Configure logging
@@ -9,12 +9,13 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 @router.post("/evaluate", response_model=AIResponse)
-async def evaluate_aquarium(layout: AquariumLayoutRequest):
+async def evaluate_aquarium(layout: AquariumLayout):
     """
-    Evaluate an aquarium layout and provide AI advice.
+    Evaluate an aquarium layout 
+    and provide AI advice.
     
     Args:
-        layout: AquariumLayoutRequest model containing all aquarium details
+        layout: AquariumLayout model containing all aquarium details
         
     Returns:
         AIResponse containing the AI's evaluation

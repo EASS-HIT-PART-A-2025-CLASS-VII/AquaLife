@@ -1,71 +1,100 @@
-# Getting Started with Create React App
+# Frontend Service
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The Frontend Service provides the React-based user interface for the AquaLife application, offering an intuitive experience for aquarium management.
 
-## Available Scripts
+## Directory Structure
 
-In the project directory, you can run:
+```
+frontend/
+├── build/                   # Production build output
+├── Dockerfile               # Docker configuration
+├── nginx/                   # Nginx configuration for production
+│   └── nginx.conf           # Nginx server config
+├── package.json             # npm dependencies and scripts
+├── package-lock.json        # Locked npm dependencies
+├── postcss.config.js        # PostCSS configuration
+├── public/                  # Static public assets
+├── README.md                # This documentation
+├── src/                     # Source code
+│   ├── assets/              # Images, fonts, and other static files
+│   ├── components/          # Reusable UI components
+│   ├── hooks/               # Custom React hooks
+│   ├── pages/               # Page components
+│   ├── services/            # API clients and services
+│   ├── App.js               # Main application component
+│   └── index.js             # Application entry point
+├── tailwind.config.js       # Tailwind CSS configuration
+└── tsconfig.json            # TypeScript configuration
+```
 
-### `npm start`
+## Flow
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. **Application Initialization**:
+   - The application starts in `index.js`
+   - App component is rendered, which sets up routing
+   - Initial state is loaded
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+2. **User Interface**:
+   - Pages represent different views in the application
+   - Components are reused across pages
+   - Hooks manage state and side effects
 
-### `npm test`
+3. **Data Flow**:
+   - Services connect to the backend API
+   - Hooks consume services and provide data to components
+   - Components render data and handle user interactions
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+4. **Styling**:
+   - Tailwind CSS provides utility-based styling
+   - Component-specific styles when needed
 
-### `npm run build`
+## Development
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Local Setup
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+# Install dependencies
+npm install
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Run development server
+npm start
+```
 
-### `npm run eject`
+### Building for Production
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+# Create optimized production build
+npm run build
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Environment Variables
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Create a `.env` file with the following variables:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```
+REACT_APP_API_URL=http://localhost:8000
+REACT_APP_AI_SERVICE_URL=http://localhost:8001
+```
 
-## Learn More
+### Docker
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+# Build and run with Docker
+docker build -t frontend-service .
+docker run -p 80:80 frontend-service
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Testing
 
-### Code Splitting
+```bash
+# Run tests
+npm test
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Key Features
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
+- Real-time aquarium monitoring
+- Fish and equipment management
+- AI-powered recommendations
+- Maintenance scheduling
+- Mobile-responsive design 

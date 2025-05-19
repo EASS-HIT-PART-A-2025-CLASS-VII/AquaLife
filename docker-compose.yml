@@ -1,8 +1,8 @@
 services:
   react-frontend:
     build:
-      context: .
-      dockerfile: Dockerfile.frontend
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: react-frontend
     ports:
       - "80:80"
@@ -17,8 +17,8 @@ services:
 
   fastapi-backend:
     build:
-      context: .
-      dockerfile: Dockerfile.backend
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: fastapi-backend
     ports:
       - "8000:8000"
@@ -47,8 +47,8 @@ services:
 
   ai-service:
     build:
-      context: .
-      dockerfile: Dockerfile.aiService
+      context: ./ai_service
+      dockerfile: Dockerfile
     container_name: ai-service
     ports:
       - "8001:8001"

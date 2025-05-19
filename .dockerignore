@@ -1,28 +1,74 @@
-# Ignore Python bytecode files
-*.pyc
-*.pyo
-*.pyd
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Environment variables (handled by Docker Compose or build args)
+.env
+.env.*
+
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
 
-# Ignore version control directories
-.git/
-.svn/
+# Virtual Environments
+.venv/
+venv/
+ENV/
 
-# Ignore IDE/editor folders
-.vscode/
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Documentation
+*.md
+docs/
+
+# IDE
 .idea/
+.vscode/
+*.swp
+*.swo
 
-# Ignore system files
+# Logs
+logs/
+*.log
+
+# OS specific
 .DS_Store
 Thumbs.db
 
-# Ignore local environment files
-.env
+# Docker
+.docker/
+.dockerignore
+docker-compose*.yml
+Dockerfile*
 
-# Ignore node_modules in case you have a frontend directory
-frontend/node_modules/
-
-# Ignore build and log files
-frontend/build/
-frontend/dist/
-*.log
+# CI/CD
+.github/
+.gitlab-ci.yml
+.circleci/

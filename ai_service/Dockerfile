@@ -13,12 +13,12 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-COPY ai_requirements.txt .
+COPY requirements.txt .
 RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r ai_requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY ai_service/ ./ai_service/
+COPY . ./ai_service/
 
 # Expose port
 EXPOSE 8001

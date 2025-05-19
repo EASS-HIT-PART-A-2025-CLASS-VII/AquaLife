@@ -1,7 +1,3 @@
-# Environment variables
-.env
-.env.*
-
 # Python
 __pycache__/
 *.py[cod]
@@ -23,32 +19,24 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-.pytest_cache/
-.coverage
-htmlcov/
-.tox/
 
 # Virtual Environments
-.venv/
 venv/
+env/
 ENV/
 
-# Node.js
-node_modules/
-npm-debug.log
-yarn-debug.log
-yarn-error.log
+# Environment variables
+.env
+.env.*
 
-# Frontend build
-frontend/build/
+# Logs
+*.log
+*.log.*
+logs/
 
 # Database
 *.db
 *.sqlite3
-
-# Logs
-logs/
-*.log
 
 # IDE
 .idea/
@@ -56,9 +44,6 @@ logs/
 *.swp
 *.swo
 
-# Docker
-.docker/
-
 # OS specific
 .DS_Store
-Thumbs.db
+Thumbs.db 

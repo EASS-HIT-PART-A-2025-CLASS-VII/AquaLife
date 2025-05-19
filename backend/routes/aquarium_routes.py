@@ -13,9 +13,11 @@ router = APIRouter(prefix="/aquariums", tags=["Aquarium Layouts"])
 def list_layouts(email: str = Query(None), db: Session = Depends(get_db)):
     return AquariumService(db).get_all(email=email)
 
+
 @router.get("/by-owner/{email}", response_model=list[AquaLayoutResponse])
 def get_layouts_by_owner(email: str, db: Session = Depends(get_db)):
     return AquariumService(db).get_all(email=email)
+
 
 @router.get("/{layout_id}", response_model=AquaLayoutResponse)
 def get_layout(layout_id: int, db: Session = Depends(get_db)):
@@ -31,7 +33,9 @@ def create_layout(layout: AquaLayoutCreate, db: Session = Depends(get_db)):
 
 
 @router.put("/{layout_id}", response_model=AquaLayoutResponse)
-def update_layout(layout_id: int, layout: AquaLayoutCreate, db: Session = Depends(get_db)):
+def update_layout(
+    layout_id: int, layout: AquaLayoutCreate, db: Session = Depends(get_db)
+):
     updated = AquariumService(db).update(layout_id, layout)
     if not updated:
         raise HTTPException(status_code=404, detail=LAYOUT_NOT_FOUND)
