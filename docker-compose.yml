@@ -1,9 +1,9 @@
 services:
-  react-frontend:
+  react-nginx-frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: react-frontend
+    container_name: react-nginx-frontend
     ports:
       - "80:80"
     networks:
