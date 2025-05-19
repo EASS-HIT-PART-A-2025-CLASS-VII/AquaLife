@@ -7,8 +7,11 @@ from ai_service.models.ai_model import AquariumLayoutRequest, AIResponse
 # Configure logging
 logger = logging.getLogger(__name__)
 
-openai.api_key = settings.OPENAI_API_KEY
-openai.base_url = settings.OPENAI_API_BASE
+# Configure OpenAI client
+client = openai.OpenAI(
+    api_key=settings.OPENAI_API_KEY,
+    base_url=settings.OPENAI_API_BASE.rstrip('/')
+)
 
 SYSTEM_PROMPT = """
 You are an intelligent aquarium design assistant. The user provides the tank dimensions and whether the aquarium is freshwater or saltwater. As the user selects fish from a catalog, you must:
@@ -63,7 +66,7 @@ async def evaluate_aquarium_layout(layout: AquariumLayoutRequest) -> AIResponse:
         logger.debug(f"Generated prompt: {prompt}")
 
         try:
-            response = openai.chat.completions.create(
+            response = client.chat.completions.create(
                 model=settings.OPENAI_MODEL,
                 messages=[
                     {"role": "system", "content": SYSTEM_PROMPT.strip()},

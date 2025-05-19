@@ -29,7 +29,7 @@ app.add_middleware(
 )
 
 # Include routers - updated prefix to match Nginx configuration
-app.include_router(ai_routes.router, prefix="/ai")
+app.include_router(ai_routes.router)
 
 @app.on_event("startup")
 async def startup_event():

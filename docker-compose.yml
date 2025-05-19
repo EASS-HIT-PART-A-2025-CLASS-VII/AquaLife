@@ -58,9 +58,6 @@ services:
       - .env
     environment:
       - COMPOSE_BAKE=true
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-3.5-turbo}
-      - LOG_LEVEL=${LOG_LEVEL:-INFO}
 
 networks:
   aqualife-network:
