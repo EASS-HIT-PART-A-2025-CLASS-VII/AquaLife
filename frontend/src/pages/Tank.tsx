@@ -1,21 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  Paper,
-  Typography,
-  TextField,
-  Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Card,
-  CardContent,
-  SelectChangeEvent,
-} from '@mui/material';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 import { useAuth } from '../contexts/AuthContext';
 import { TankMaintenanceService } from '../services/tankMaintenanceService';
 import { AquariumService } from '../services/aquariumService';
@@ -69,7 +54,7 @@ const Tank: React.FC = () => {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setMaintenance((prev: TankMaintenanceCreate) => ({
       ...prev,
@@ -77,14 +62,14 @@ const Tank: React.FC = () => {
     }));
   };
 
-  const handleLayoutChange = (e: SelectChangeEvent<number>) => {
+  const handleLayoutChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setMaintenance((prev: TankMaintenanceCreate) => ({
       ...prev,
       layout_id: Number(e.target.value)
     }));
   };
 
-  const handleMaintenanceTypeChange = (e: SelectChangeEvent<string>) => {
+  const handleMaintenanceTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setMaintenance((prev: TankMaintenanceCreate) => ({
       ...prev,
       maintenance_type: e.target.value
@@ -122,121 +107,139 @@ const Tank: React.FC = () => {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
+    <div className="p-6">
+      <h1 className="text-3xl font-bold mb-6">
         Tank Maintenance
-      </Typography>
+      </h1>
 
-      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3 }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Maintenance Form */}
-        <Box sx={{ flex: 1 }}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              Add Maintenance Entry
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <FormControl fullWidth>
-                <InputLabel>Select Aquarium</InputLabel>
-                <Select
-                  value={maintenance.layout_id}
-                  label="Select Aquarium"
-                  onChange={handleLayoutChange}
-                >
-                  {layouts.map((layout) => (
-                    <MenuItem key={layout.id} value={layout.id}>
-                      {layout.tank_name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <FormControl fullWidth>
-                <InputLabel>Maintenance Type</InputLabel>
-                <Select
-                  value={maintenance.maintenance_type}
-                  label="Maintenance Type"
-                  onChange={handleMaintenanceTypeChange}
-                >
-                  <MenuItem value="Water Change">Water Change</MenuItem>
-                  <MenuItem value="Filter Cleaning">Filter Cleaning</MenuItem>
-                  <MenuItem value="Feeding">Feeding</MenuItem>
-                  <MenuItem value="Water Testing">Water Testing</MenuItem>
-                  <MenuItem value="Other">Other</MenuItem>
-                </Select>
-              </FormControl>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DateTimePicker
-                  label="Maintenance Date"
-                  value={maintenance.maintenance_date}
-                  onChange={handleDateChange}
-                />
-              </LocalizationProvider>
-              <TextField
-                fullWidth
-                label="Description"
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold mb-4">
+            Add Maintenance Entry
+          </h2>
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="layout-select" className="block text-sm font-medium text-gray-700 mb-1">
+                Select Aquarium
+              </label>
+              <select
+                id="layout-select"
+                value={maintenance.layout_id}
+                onChange={handleLayoutChange}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select an aquarium</option>
+                {layouts.map((layout) => (
+                  <option key={layout.id} value={layout.id}>
+                    {layout.tank_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="maintenance-type" className="block text-sm font-medium text-gray-700 mb-1">
+                Maintenance Type
+              </label>
+              <select
+                id="maintenance-type"
+                value={maintenance.maintenance_type}
+                onChange={handleMaintenanceTypeChange}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select type</option>
+                <option value="Water Change">Water Change</option>
+                <option value="Filter Cleaning">Filter Cleaning</option>
+                <option value="Feeding">Feeding</option>
+                <option value="Water Testing">Water Testing</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="maintenance-date" className="block text-sm font-medium text-gray-700 mb-1">
+                Maintenance Date
+              </label>
+              <DatePicker
+                id="maintenance-date"
+                selected={maintenance.maintenance_date}
+                onChange={handleDateChange}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                dateFormat="MMMM d, yyyy h:mm aa"
+                showTimeSelect
+              />
+            </div>
+
+            <div>
+              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+                Description
+              </label>
+              <textarea
+                id="description"
                 name="description"
-                multiline
-                rows={4}
                 value={maintenance.description}
                 onChange={handleInputChange}
-              />
-              <TextField
-                fullWidth
-                label="Notes"
-                name="notes"
-                multiline
                 rows={4}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">
+                Notes
+              </label>
+              <textarea
+                id="notes"
+                name="notes"
                 value={maintenance.notes}
                 onChange={handleInputChange}
+                rows={4}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSaveMaintenance}
-                disabled={loading}
-              >
-                Save Maintenance Entry
-              </Button>
-            </Box>
-          </Paper>
-        </Box>
+            </div>
+
+            <button
+              onClick={handleSaveMaintenance}
+              disabled={loading}
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Saving...' : 'Save Maintenance Entry'}
+            </button>
+          </div>
+        </div>
 
         {/* Maintenance History */}
-        <Box sx={{ flex: 1 }}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              Maintenance History
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              {maintenanceEntries.map((entry) => (
-                <Box key={entry.id}>
-                  <Card>
-                    <CardContent>
-                      <Typography variant="h6">
-                        {entry.maintenance_type}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Date: {new Date(entry.maintenance_date).toLocaleString()}
-                      </Typography>
-                      <Typography variant="body2">
-                        Description: {entry.description}
-                      </Typography>
-                      {entry.notes && (
-                        <Typography variant="body2">
-                          Notes: {entry.notes}
-                        </Typography>
-                      )}
-                      <Typography variant="body2">
-                        Status: {entry.completed ? 'Completed' : 'Pending'}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Box>
-              ))}
-            </Box>
-          </Paper>
-        </Box>
-      </Box>
-    </Box>
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold mb-4">
+            Maintenance History
+          </h2>
+          <div className="space-y-4">
+            {maintenanceEntries.map((entry) => (
+              <div key={entry.id} className="border rounded-lg p-4">
+                <h3 className="text-lg font-semibold mb-2">
+                  {entry.maintenance_type}
+                </h3>
+                <p className="text-sm text-gray-500 mb-2">
+                  Date: {new Date(entry.maintenance_date).toLocaleString()}
+                </p>
+                <p className="text-sm mb-2">
+                  Description: {entry.description}
+                </p>
+                {entry.notes && (
+                  <p className="text-sm mb-2">
+                    Notes: {entry.notes}
+                  </p>
+                )}
+                <p className="text-sm">
+                  Status: {entry.completed ? 'Completed' : 'Pending'}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -1,35 +1,9 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  Box, 
-  List, 
-  ListItem, 
-  ListItemIcon, 
-  ListItemText, 
-  Typography,
-  styled,
-  ListItemButton
-} from '@mui/material';
-import { 
-  Palette as DesignIcon,
-  WaterDrop as TankIcon
-} from '@mui/icons-material';
-
-const StyledSidebar = styled(Box)(({ theme }) => ({
-  width: 240,
-  height: '100vh',
-  backgroundColor: theme.palette.background.paper,
-  borderRight: `1px solid ${theme.palette.divider}`,
-  padding: theme.spacing(2),
-}));
-
-const StyledListItem = styled(ListItemButton)(({ theme }) => ({
-  borderRadius: theme.shape.borderRadius,
-  marginBottom: theme.spacing(1),
-  '&:hover': {
-    backgroundColor: theme.palette.action.hover,
-  },
-}));
+  SwatchIcon as DesignIcon,
+  BeakerIcon as TankIcon
+} from '@heroicons/react/24/outline';
 
 const Sidebar: React.FC = () => {
   const location = useLocation();
@@ -37,38 +11,38 @@ const Sidebar: React.FC = () => {
   const menuItems = [
     {
       text: 'Design',
-      icon: <DesignIcon />,
+      icon: <DesignIcon className="h-6 w-6" />,
       path: '/design'
     },
     {
       text: 'Tank',
-      icon: <TankIcon />,
+      icon: <TankIcon className="h-6 w-6" />,
       path: '/tank'
     }
   ];
 
   return (
-    <StyledSidebar>
-      <Typography variant="h6" sx={{ mb: 2 }}>
+    <div className="w-60 h-screen bg-white border-r border-gray-200 p-4">
+      <h2 className="text-xl font-semibold mb-4">
         AquaLife Dashboard
-      </Typography>
-      <List>
+      </h2>
+      <nav>
         {menuItems.map((item) => (
           <Link 
             to={item.path} 
             key={item.text}
-            style={{ textDecoration: 'none', color: 'inherit' }}
+            className={`flex items-center px-4 py-2 text-gray-700 rounded-lg mb-2 transition-colors duration-200 ${
+              location.pathname === item.path 
+                ? 'bg-blue-50 text-blue-600' 
+                : 'hover:bg-gray-50'
+            }`}
           >
-            <StyledListItem
-              selected={location.pathname === item.path}
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </StyledListItem>
+            <span className="mr-3">{item.icon}</span>
+            <span>{item.text}</span>
           </Link>
         ))}
-      </List>
-    </StyledSidebar>
+      </nav>
+    </div>
   );
 };
 
