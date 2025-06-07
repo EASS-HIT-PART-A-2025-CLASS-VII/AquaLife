@@ -1,9 +1,16 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from backend.routes import user_routes, fish_routes, aquarium_routes, ai_routes, tank_maintain_routes
+import os
 
 
 app = FastAPI()
+
+# Mount static files (for fish images)
+static_path = os.path.join(os.path.dirname(__file__), "static")
+if os.path.exists(static_path):
+    app.mount("/static", StaticFiles(directory=static_path), name="static")
 
 # Configure CORS
 app.add_middleware(
@@ -33,7 +40,7 @@ app.include_router(tank_maintain_routes.router, prefix="/api")
 
 @app.get("/")
 def read_root():
-    return {"Hello": "Backend"}
+    return {"Hello": "Backend with Fish Catalog"}
 
 
 
