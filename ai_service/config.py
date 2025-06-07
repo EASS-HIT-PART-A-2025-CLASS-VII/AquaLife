@@ -4,9 +4,12 @@ import logging
 logger = logging.getLogger(__name__)
 
 class AISettings(BaseSettings):
-    OPENAI_API_KEY: str
-    OPENAI_API_BASE: str = "https://api.openai.com/v1"
-    OPENAI_MODEL: str = "gpt-3.5-turbo"
+    # Required from environment
+    OPENROUTER_API_KEY: str
+    
+    # Sensible defaults (can be overridden via .env if needed)
+    OPENROUTER_API_BASE: str = "https://openrouter.ai/api/v1/chat/completions"
+    OPENROUTER_MODEL: str = "google/gemma-2-9b-it:free"
     DEBUG: bool = False
 
     model_config = SettingsConfigDict(
@@ -17,6 +20,6 @@ class AISettings(BaseSettings):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        logger.info(f"Initializing AI Settings with model: {self.OPENAI_MODEL}")
+        logger.info(f"Initializing AI Settings with OpenRouter model: {self.OPENROUTER_MODEL}")
 
 settings = AISettings()

@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import Mock, patch
 from ai_service.models.ai_model import AquariumLayoutRequest, FishEntry, AIResponse
-from ai_service.services.aqua_service import evaluate_aquarium_layout, OpenAIError, ValidationError, AquariumServiceError
+from ai_service.services.aqua_service import evaluate_aquarium_layout, OpenRouterError, ValidationError, AquariumServiceError
 import openai
 
 # Test data
@@ -37,7 +37,7 @@ SAMPLE_AQUARIUM_LAYOUT = {
 }
 
 @pytest.fixture
-def mock_openai_response():
+def mock_openrouter_response():
     return Mock(
         choices=[
             Mock(
@@ -108,13 +108,13 @@ class TestAquariumLayout:
 @pytest.mark.asyncio
 class TestAIService:
     @patch('openai.chat.completions.create')
-    async def test_initial_fish_recommendation(self, mock_create, mock_openai_response, sample_aquarium_layout):
+    async def test_initial_fish_recommendation(self, mock_create, mock_openrouter_response, sample_aquarium_layout):
         """Test initial fish recommendation from AI"""
-        mock_create.return_value = mock_openai_response
+        mock_create.return_value = mock_openrouter_response
         
         response = await evaluate_aquarium_layout(sample_aquarium_layout)
         
-        # Verify the correct data is sent to OpenAI
+        # Verify the correct data is sent to OpenRouter
         mock_create.assert_called_once()
         call_args = mock_create.call_args[1]
         messages = call_args["messages"]
@@ -135,10 +135,10 @@ class TestAIService:
         assert "Neon Tetra" in response.response
 
     @patch('openai.chat.completions.create')
-    async def test_add_more_fish(self, mock_create, mock_openai_response, sample_aquarium_layout):
+    async def test_add_more_fish(self, mock_create, mock_openrouter_response, sample_aquarium_layout):
         """Test adding more fish to the aquarium"""
         # First request
-        mock_create.return_value = mock_openai_response
+        mock_create.return_value = mock_openrouter_response
         await evaluate_aquarium_layout(sample_aquarium_layout)
         
         # Add more fish
@@ -203,9 +203,9 @@ class TestAIService:
         assert "Water type must be either 'freshwater' or 'saltwater'" in str(exc_info.value)
 
     @patch('openai.chat.completions.create')
-    async def test_openai_error_handling(self, mock_create, sample_aquarium_layout):
-        """Test handling of OpenAI API errors"""
-        # Mock the OpenAI API to raise a specific error
+    async def test_openrouter_error_handling(self, mock_create, sample_aquarium_layout):
+        """Test handling of OpenRouter API errors"""
+        # Mock the OpenRouter API to raise a specific error
         mock_request = Mock()
         mock_create.side_effect = openai.APIError(
             message="API Error",

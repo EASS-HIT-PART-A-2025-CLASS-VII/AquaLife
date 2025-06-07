@@ -34,7 +34,7 @@ app.include_router(ai_routes.router)
 @app.on_event("startup")
 async def startup_event():
     logger.info("Starting Aquarium AI Service")
-    logger.info(f"Using OpenAI model: {settings.OPENAI_MODEL}")
+    logger.info(f"Using OpenRouter model: {settings.OPENROUTER_MODEL}")
 
 @app.on_event("shutdown")
 async def shutdown_event():

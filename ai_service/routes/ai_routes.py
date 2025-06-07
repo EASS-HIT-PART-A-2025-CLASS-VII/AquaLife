@@ -1,7 +1,7 @@
 import logging
 from fastapi import APIRouter, HTTPException
 from models.ai_model import AquariumLayout, AIResponse
-from services.aqua_service import evaluate_aquarium_layout, AquariumServiceError, OpenAIError, ValidationError
+from services.aqua_service import evaluate_aquarium_layout, AquariumServiceError, OpenRouterError, ValidationError
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -36,8 +36,8 @@ async def evaluate_aquarium(layout: AquariumLayout):
         logger.error(f"Validation error: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
         
-    except OpenAIError as e:
-        logger.error(f"OpenAI API error: {str(e)}")
+    except OpenRouterError as e:
+        logger.error(f"OpenRouter API error: {str(e)}")
         raise HTTPException(status_code=503, detail=str(e))
         
     except AquariumServiceError as e:
