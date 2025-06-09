@@ -6,7 +6,8 @@ A containerized microservices application for aquarium management with an AI-pow
 
 ![image](https://github.com/user-attachments/assets/9ceacfd1-c283-4ec8-b6d3-96a9ec0efc22)
 
-![image](https://github.com/user-attachments/assets/a5d7e826-52bb-41d8-8270-e0ea8aa972b4)
+![2025-06-09 22 26 46](https://github.com/user-attachments/assets/d99479d2-014a-4938-b107-bec6cd0806d8)
+
 
 ## Project Structure
 
