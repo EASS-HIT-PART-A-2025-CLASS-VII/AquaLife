@@ -76,7 +76,7 @@ docker-compose down
 |---------|-------------|------|---------------|
 | Frontend | React-based UI | 80 | [frontend/README.md](frontend/README.md) |
 | Backend | FastAPI core service | 8000 | [backend/README.md](backend/README.md) |
-| AI Service | OpenAI-powered recommendations | 8001 | [ai_service/README.md](ai_service/README.md) |
+| AI Service | OpenRouter-powered recommendations | 8001 | [ai_service/README.md](ai_service/README.md) |
 | PostgreSQL | Database | 5432 | - |
 
 ## Development
