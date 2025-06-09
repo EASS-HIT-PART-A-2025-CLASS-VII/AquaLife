@@ -53,8 +53,8 @@ POSTGRES_USER=postgres
 POSTGRES_PASSWORD=your_password
 POSTGRES_DB=aqualife
 
-# OpenAI Configuration 
-OPENAI_API_KEY=your_openai_api_key
+# OpenRouter Configuration 
+OPENROUTER_API_KEY=your_api_key
 ```
 
 ### Running with Docker Compose
