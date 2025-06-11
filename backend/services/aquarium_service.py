@@ -1,5 +1,7 @@
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from backend.models.aqualayout_model import AquaLayout, AquaLayoutCreate
+from backend.models.tank_maintain_model import TankMaintenance
 
 
 class AquariumService:
@@ -36,6 +38,30 @@ class AquariumService:
         layout = self.get_by_id(layout_id)
         if not layout:
             return None
-        self.db.delete(layout)
-        self.db.commit()
-        return layout
+        
+        try:
+            # First, delete all maintenance records for this layout using bulk delete
+            self.db.query(TankMaintenance).filter(
+                TankMaintenance.layout_id == layout_id
+            ).delete()
+            
+            # Flush to execute the maintenance deletions immediately
+            self.db.flush()
+            
+            # Then delete the layout itself
+            self.db.delete(layout)
+            
+            # Commit all deletions
+            self.db.commit()
+            
+            return layout
+        except IntegrityError as e:
+            self.db.rollback()
+            # This shouldn't happen now with cascading delete, but just in case
+            if "foreign key" in str(e).lower() or "tank_maintenance_layout_id_fkey" in str(e):
+                raise ValueError("Cannot delete layout because it has maintenance records. Delete maintenance records first.")
+            else:
+                raise ValueError(f"Database constraint violation: {str(e)}")
+        except Exception as e:
+            self.db.rollback()
+            raise ValueError(f"Error deleting layout: {str(e)}")

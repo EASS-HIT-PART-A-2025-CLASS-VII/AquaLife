@@ -19,6 +19,10 @@ class FishRepository:
         """Get a fish by name"""
         return self.db.query(Fish).filter(Fish.name == name).first()
 
+    def get_by_water_type(self, water_type: str) -> List[Fish]:
+        """Get fish by water type (freshwater or saltwater)"""
+        return self.db.query(Fish).filter(Fish.water_type == water_type).order_by(Fish.name).all()
+
     def search_by_name(self, search_term: str) -> List[Fish]:
         """Search fish by name (case-insensitive partial match)"""
         return self.db.query(Fish).filter(
@@ -29,7 +33,8 @@ class FishRepository:
         """Create a new fish in the catalog"""
         fish = Fish(
             name=fish_data.name,
-            image_url=fish_data.image_url
+            image_url=fish_data.image_url,
+            water_type=fish_data.water_type
         )
         self.db.add(fish)
         self.db.commit()
@@ -42,6 +47,7 @@ class FishRepository:
         if fish:
             fish.name = fish_data.name
             fish.image_url = fish_data.image_url
+            fish.water_type = fish_data.water_type
             self.db.commit()
             self.db.refresh(fish)
         return fish

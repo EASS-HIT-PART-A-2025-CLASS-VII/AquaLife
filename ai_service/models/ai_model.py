@@ -14,6 +14,7 @@ class AquariumLayout(BaseModel):
     water_type: str
     fish_data: List[FishEntry]
     comments: Optional[str] = None
+    unit: Optional[str] = "cm"  # "cm" or "inch"
 
 class AIResponse(BaseModel):
     status: str

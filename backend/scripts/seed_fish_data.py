@@ -43,72 +43,72 @@ def get_local_db_session():
 # Popular Freshwater Fish
 FRESHWATER_FISH = [
     # Tetras
-    {"name": "Neon Tetra", "image_url": "/static/images/fish/freshwater/tetras/neon_tetra.jpg"},
-    {"name": "Cardinal Tetra", "image_url": "/static/images/fish/freshwater/tetras/cardinal_tetra.jpg"},
-    {"name": "Black Skirt Tetra", "image_url": "/static/images/fish/freshwater/tetras/black_skirt_tetra.jpg"},
-    {"name": "Serpae Tetra", "image_url": "/static/images/fish/freshwater/tetras/serpae_tetra.jpg"},
+    {"name": "Neon Tetra", "image_url": "/static/images/fish/freshwater/neon_tetra.jpg", "water_type": "freshwater"},
+    {"name": "Cardinal Tetra", "image_url": "/static/images/fish/freshwater/cardinal_tetra.jpg", "water_type": "freshwater"},
+    {"name": "Black Skirt Tetra", "image_url": "/static/images/fish/freshwater/black_skirt_tetra.jpg", "water_type": "freshwater"},
+    {"name": "Serpae Tetra", "image_url": "/static/images/fish/freshwater/serpae_tetra.jpg", "water_type": "freshwater"},
     
     # Livebearers
-    {"name": "Guppy", "image_url": "/static/images/fish/freshwater/livebearers/guppy.jpg"},
-    {"name": "Molly", "image_url": "/static/images/fish/freshwater/livebearers/molly.jpg"},
-    {"name": "Platy", "image_url": "/static/images/fish/freshwater/livebearers/platy.jpg"},
-    {"name": "Swordtail", "image_url": "/static/images/fish/freshwater/livebearers/swordtail.jpg"},
+    {"name": "Guppy", "image_url": "/static/images/fish/freshwater/guppy.jpg", "water_type": "freshwater"},
+    {"name": "Molly", "image_url": "/static/images/fish/freshwater/black_molly.jpg", "water_type": "freshwater"},
+    {"name": "Platy", "image_url": "/static/images/fish/freshwater/southern_platy.jpg", "water_type": "freshwater"},
+    {"name": "Swordtail", "image_url": "/static/images/fish/freshwater/green_swordtail.jpg", "water_type": "freshwater"},
     
     # Bettas
-    {"name": "Betta Fish", "image_url": "/static/images/fish/freshwater/bettas/betta_fish.jpg"},
-    {"name": "Crown Tail Betta", "image_url": "/static/images/fish/freshwater/bettas/crown_tail_beta.jpg"},
+    {"name": "Betta Fish", "image_url": "/static/images/fish/freshwater/veiltail_betta.jpg", "water_type": "freshwater"},
+    {"name": "Crown Tail Betta", "image_url": "/static/images/fish/freshwater/crown_tail_betta.jpg", "water_type": "freshwater"},
     
     # Cichlids
-    {"name": "Angelfish", "image_url": "/static/images/fish/freshwater/cichlids/angelfish.jpg"},
-    {"name": "Discus", "image_url": "/static/images/fish/freshwater/cichlids/discus.jpg"},
-    {"name": "German Blue Ram", "image_url": "/static/images/fish/freshwater/cichlids/german_blue_ram.jpg"},
+    {"name": "Angelfish", "image_url": "/static/images/fish/freshwater/freshwater_angelfish.jpg", "water_type": "freshwater"},
+    {"name": "Discus", "image_url": "/static/images/fish/freshwater/discus.jpg", "water_type": "freshwater"},
+    {"name": "German Blue Ram", "image_url": "/static/images/fish/freshwater/german_blue_ram.jpg", "water_type": "freshwater"},
     
     # Catfish
-    {"name": "Corydoras Catfish", "image_url": "/static/images/fish/freshwater/catfish/corydoras_catfish.jpg"},
-    {"name": "Bristlenose Pleco", "image_url": "/static/images/fish/freshwater/catfish/bristlenose_pleco.jpg"},
-    {"name": "Glass Catfish", "image_url": "/static/images/fish/freshwater/catfish/glass_catfish.jpg"},
+    {"name": "Corydoras Catfish", "image_url": "/static/images/fish/freshwater/corydoras_catfish.jpg", "water_type": "freshwater"},
+    {"name": "Bristlenose Pleco", "image_url": "/static/images/fish/freshwater/bristlenose_pleco.jpg", "water_type": "freshwater"},
+    {"name": "Glass Catfish", "image_url": "/static/images/fish/freshwater/glass_catfish.jpg", "water_type": "freshwater"},
     
     # Danios and Barbs
-    {"name": "Zebra Danio", "image_url": "/static/images/fish/freshwater/danios/zebra_danio.jpg"},
-    {"name": "Pearl Danio", "image_url": "/static/images/fish/freshwater/danios/pearl_danio.jpg"},
-    {"name": "Tiger Barb", "image_url": "/static/images/fish/freshwater/barbs/tiger_barb.jpg"},
-    {"name": "Cherry Barb", "image_url": "/static/images/fish/freshwater/barbs/cherry_barb.jpg"},
+    {"name": "Zebra Danio", "image_url": "/static/images/fish/freshwater/zebra_danio.jpg", "water_type": "freshwater"},
+    {"name": "Pearl Danio", "image_url": "/static/images/fish/freshwater/pearl_danio.jpg", "water_type": "freshwater"},
+    {"name": "Tiger Barb", "image_url": "/static/images/fish/freshwater/tiger_barb.jpg", "water_type": "freshwater"},
+    {"name": "Cherry Barb", "image_url": "/static/images/fish/freshwater/cherry_barb.jpg", "water_type": "freshwater"},
     
     # Goldfish
-    {"name": "Goldfish", "image_url": "/static/images/fish/freshwater/goldfish/goldfish.jpg"},
-    {"name": "Fancy Goldfish", "image_url": "/static/images/fish/freshwater/goldfish/fancy_goldfish.jpg"},
+    {"name": "Goldfish", "image_url": "/static/images/fish/freshwater/goldfish.jpg", "water_type": "freshwater"},
+    {"name": "Fancy Goldfish", "image_url": "/static/images/fish/freshwater/fancy_goldfish.jpg", "water_type": "freshwater"},
 ]
 
 # Popular Saltwater Fish
 SALTWATER_FISH = [
     # Clownfish
-    {"name": "Ocellaris Clownfish", "image_url": "/static/images/fish/saltwater/clownfish/ocellaris_clownfish.jpg"},
-    {"name": "Percula Clownfish", "image_url": "/static/images/fish/saltwater/clownfish/percula_clownfish.jpg"},
-    {"name": "Maroon Clownfish", "image_url": "/static/images/fish/saltwater/clownfish/maroon_clownfish.jpg"},
+    {"name": "Ocellaris Clownfish", "image_url": "/static/images/fish/saltwater/ocellaris_clownfish.jpg", "water_type": "saltwater"},
+    {"name": "Percula Clownfish", "image_url": "/static/images/fish/saltwater/percula_cownfish.jpg", "water_type": "saltwater"},
+    {"name": "Maroon Clownfish", "image_url": "/static/images/fish/saltwater/maroon_clownfish.jpg", "water_type": "saltwater"},
     
     # Tangs
-    {"name": "Blue Tang", "image_url": "/static/images/fish/saltwater/tangs/blue_tang.jpg"},
-    {"name": "Yellow Tang", "image_url": "/static/images/fish/saltwater/tangs/yellow_tang.jpg"},
-    {"name": "Powder Blue Tang", "image_url": "/static/images/fish/saltwater/tangs/powder_blue_tang.jpg"},
+    {"name": "Blue Tang", "image_url": "/static/images/fish/saltwater/blue_tang.jpg", "water_type": "saltwater"},
+    {"name": "Yellow Tang", "image_url": "/static/images/fish/saltwater/yellow_tang.webp", "water_type": "saltwater"},
+    {"name": "Powder Blue Tang", "image_url": "/static/images/fish/saltwater/powder_blue_tang.jpg", "water_type": "saltwater"},
     
     # Marine Angelfish
-    {"name": "Queen Angelfish", "image_url": "/static/images/fish/saltwater/angelfish/queen_angelfish.jpg"},
-    {"name": "French Angelfish", "image_url": "/static/images/fish/saltwater/angelfish/french_angelfish.jpg"},
-    {"name": "Flame Angelfish", "image_url": "/static/images/fish/saltwater/angelfish/flame_angelfish.jpg"},
+    {"name": "Queen Angelfish", "image_url": "/static/images/fish/saltwater/queen_angelfish.jpg", "water_type": "saltwater"},
+    {"name": "French Angelfish", "image_url": "/static/images/fish/saltwater/french_angelfish.jpg", "water_type": "saltwater"},
+    {"name": "Flame Angelfish", "image_url": "/static/images/fish/saltwater/flame_angelfish.jpg", "water_type": "saltwater"},
     
     # Gobies
-    {"name": "Mandarin Goby", "image_url": "/static/images/fish/saltwater/gobies/mandarin_goby.jpg"},
-    {"name": "Yellow Watchman Goby", "image_url": "/static/images/fish/saltwater/gobies/yellow_watchman_goby.jpg"},
-    {"name": "Firefish Goby", "image_url": "/static/images/fish/saltwater/gobies/firefish_goby.jpg"},
+    {"name": "Mandarin Goby", "image_url": "/static/images/fish/saltwater/mandarin_goby.jpg", "water_type": "saltwater"},
+    {"name": "Yellow Watchman Goby", "image_url": "/static/images/fish/saltwater/yellow_watchman_goby.jpg", "water_type": "saltwater"},
+    {"name": "Firefish Goby", "image_url": "/static/images/fish/saltwater/firefish_goby.jpg", "water_type": "saltwater"},
     
     # Wrasses
-    {"name": "Six Line Wrasse", "image_url": "/static/images/fish/saltwater/wrasses/six_line_wrasse.jpg"},
-    {"name": "Fairy Wrasse", "image_url": "/static/images/fish/saltwater/wrasses/fairy_wrasse.jpg"},
-    {"name": "Cleaner Wrasse", "image_url": "/static/images/fish/saltwater/wrasses/cleaner_wrasse.jpg"},
+    {"name": "Six Line Wrasse", "image_url": "/static/images/fish/saltwater/six_line_wrasse.jpg", "water_type": "saltwater"},
+    {"name": "Fairy Wrasse", "image_url": "/static/images/fish/saltwater/fairy_wrasse.jpg", "water_type": "saltwater"},
+    {"name": "Cleaner Wrasse", "image_url": "/static/images/fish/saltwater/cleaner_wrasse.jpg", "water_type": "saltwater"},
     
     # Damsels
-    {"name": "Blue Damsel", "image_url": "/static/images/fish/saltwater/damsels/blue_damsel.jpg"},
-    {"name": "Yellowtail Damsel", "image_url": "/static/images/fish/saltwater/damsels/yellowtail_damsel.jpg"},
+    {"name": "Blue Damsel", "image_url": "/static/images/fish/saltwater/blue_damsel.jpg", "water_type": "saltwater"},
+    {"name": "Yellowtail Damsel", "image_url": "/static/images/fish/saltwater/yellowtail_damsel.jpg", "water_type": "saltwater"},
 ]
 
 

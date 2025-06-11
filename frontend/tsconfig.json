@@ -12,7 +12,7 @@
     "allowJs": true,
     "checkJs": false,
     "noEmit": true, // ✅ prevent TypeScript from writing files
-    "types": ["node"],
+    "types": ["vite/client", "node"],
     "paths": {
       "@/*": ["./*"],
       "@lib/*": ["./lib/*"]

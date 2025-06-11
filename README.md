@@ -25,8 +25,10 @@ AquaLife/
 │   ├── requirements.txt   # Backend Python dependencies  
 │   └── ...                # Other backend files
 │
-├── frontend/              # User interface using React
+├── frontend/              # User interface using React + Vite
 │   ├── Dockerfile         # Frontend container configuration
+│   ├── vite.config.ts     # Vite build configuration
+│   ├── index.html         # Main HTML template
 │   └── ...                # Other frontend files
 │
 ├── docker-compose.yml     # Multi-container orchestration
@@ -74,7 +76,7 @@ docker-compose down
 
 | Service | Description | Port | Documentation |
 |---------|-------------|------|---------------|
-| Frontend | React-based UI | 80 | [frontend/README.md](frontend/README.md) |
+| Frontend | React + Vite UI | 80 | [frontend/README.md](frontend/README.md) |
 | Backend | FastAPI core service | 8000 | [backend/README.md](backend/README.md) |
 | AI Service | OpenRouter-powered recommendations | 8001 | [ai_service/README.md](ai_service/README.md) |
 | PostgreSQL | Database | 5432 | - |
@@ -82,4 +84,8 @@ docker-compose down
 ## Development
 
 See each service's README for specific development instructions.
+
+## Recent Updates
+
+- **Frontend Migration to Vite** (Latest): Migrated from Create React App to Vite for significantly improved development performance and build optimization
 

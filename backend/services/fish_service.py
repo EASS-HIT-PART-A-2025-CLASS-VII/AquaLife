@@ -21,6 +21,10 @@ class FishService:
         """Get a fish by exact name match"""
         return self.repository.get_by_name(name)
 
+    def get_by_water_type(self, water_type: str) -> List[Fish]:
+        """Get fish by water type (freshwater or saltwater)"""
+        return self.repository.get_by_water_type(water_type)
+
     def search_by_name(self, search_term: str) -> List[Fish]:
         """Search fish by name (partial match)"""
         return self.repository.search_by_name(search_term)
@@ -31,7 +35,7 @@ class FishService:
         if not fish_data.image_url:
             # Convert fish name to URL-friendly format
             image_filename = fish_data.name.lower().replace(" ", "_").replace("-", "_") + ".jpg"
-            fish_data.image_url = f"/static/images/fish/{image_filename}"
+            fish_data.image_url = f"/static/images/fish/{fish_data.water_type}/{image_filename}"
         
         return self.repository.create(fish_data)
 

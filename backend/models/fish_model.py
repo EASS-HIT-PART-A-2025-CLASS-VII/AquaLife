@@ -9,6 +9,7 @@ class Fish(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False, unique=True)
     image_url = Column(String, nullable=True)
+    water_type = Column(String, nullable=False)  # "freshwater" or "saltwater"
 
 
 # Pydantic schema for response
@@ -16,6 +17,7 @@ class FishResponse(BaseModel):
     id: int
     name: str
     image_url: str | None = None
+    water_type: str
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -24,3 +26,4 @@ class FishResponse(BaseModel):
 class FishCreate(BaseModel):
     name: str
     image_url: str | None = None
+    water_type: str

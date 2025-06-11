@@ -44,7 +44,11 @@ def update_layout(
 
 @router.delete("/{layout_id}")
 def delete_layout(layout_id: int, db: Session = Depends(get_db)):
-    deleted = AquariumService(db).delete(layout_id)
-    if not deleted:
-        raise HTTPException(status_code=404, detail=LAYOUT_NOT_FOUND)
-    return {"status": "deleted"}
+    try:
+        deleted = AquariumService(db).delete(layout_id)
+        if not deleted:
+            raise HTTPException(status_code=404, detail=LAYOUT_NOT_FOUND)
+        return {"status": "deleted"}
+    except ValueError as e:
+        # Handle database constraint violations and other service errors
+        raise HTTPException(status_code=400, detail=str(e))

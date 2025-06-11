@@ -15,6 +15,14 @@ def list_fish(db: Session = Depends(get_db)):
     return FishService(db).get_all()
 
 
+@router.get("/by-water-type/{water_type}", response_model=list[FishResponse])
+def list_fish_by_water_type(water_type: str, db: Session = Depends(get_db)):
+    """Get fish by water type (freshwater or saltwater)"""
+    if water_type not in ["freshwater", "saltwater"]:
+        raise HTTPException(status_code=400, detail="Water type must be 'freshwater' or 'saltwater'")
+    return FishService(db).get_by_water_type(water_type)
+
+
 @router.get("/search", response_model=list[FishResponse])
 def search_fish(
     q: str = Query(..., min_length=1, description="Search term for fish name"),
