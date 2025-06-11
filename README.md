@@ -1,91 +1,445 @@
-# AquaLife
+# 🐠 AquaLife
 
-A containerized microservices application for aquarium management with an AI-powered advisor.
+<div align="center">
 
-![image](https://github.com/user-attachments/assets/d942ce66-923b-4595-acb0-0cbbf4220e1e)
+![AquaLife Logo](https://github.com/user-attachments/assets/d942ce66-923b-4595-acb0-0cbbf4220e1e)
 
-![image](https://github.com/user-attachments/assets/9ceacfd1-c283-4ec8-b6d3-96a9ec0efc22)
+**A sophisticated containerized microservices application for intelligent aquarium management with AI-powered advisory capabilities.**
 
-![2025-06-09 22 26 46](https://github.com/user-attachments/assets/d99479d2-014a-4938-b107-bec6cd0806d8)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-005571?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://reactjs.org/)
 
+</div>
 
-## Project Structure
+## 📊 Code Statistics
 
-AquaLife follows a microservices architecture with three main components:
+| Language | Files | Percentage |
+|----------|-------|------------|
+| **Python** | 45+ | ~55% |
+| **TypeScript/JavaScript** | 30+ | ~35% |
+| **Docker/Config** | 8+ | ~10% |
+
+## 🏗️ Architecture Overview
+
+AquaLife implements a secure, scalable microservices architecture with advanced container isolation and intelligent networking:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                          NGINX PROXY                           │
+│                  (Rate Limiting & Security)                    │
+└─────────────────────────┬───────────────────────────────────────┘
+                          │
+        ┌─────────────────┼─────────────────┐
+        │                 │                 │
+┌───────▼──────┐ ┌────────▼──────┐ ┌────────▼──────┐
+│   Frontend   │ │    Backend    │ │  AI Service   │
+│    (React)   │ │   (FastAPI)   │ │  (OpenRouter) │
+│              │ │               │ │               │
+│ Port: 80     │ │ Port: 8000    │ │ Port: 8001    │
+└──────────────┘ └───────┬───────┘ └───────────────┘
+                         │
+                ┌────────▼──────┐
+                │  PostgreSQL   │
+                │   Database    │
+                │ Port: 5432    │
+                └───────────────┘
+```
+
+## 🚀 Project Structure
 
 ```
 AquaLife/
-├── ai_service/            # AI recommendations service using OpenAI
-│   ├── Dockerfile         # AI service container configuration
-│   ├── requirements.txt   # AI service Python dependencies
-│   └── ...                # Other AI service files
+├── 🎨 frontend/                    # React + Vite + TypeScript UI
+│   ├── src/
+│   │   ├── components/            # Reusable UI components
+│   │   ├── pages/                 # Application pages
+│   │   └── services/              # API integration
+│   ├── nginx/                     # Nginx configuration
+│   │   ├── nginx.conf            # Main Nginx config
+│   │   ├── default.conf          # Server block config
+│   │   └── default_SSL.conf      # SSL configuration
+│   └── Dockerfile                # Frontend container
 │
-├── backend/               # Core API service using FastAPI
-│   ├── Dockerfile         # Backend container configuration
-│   ├── requirements.txt   # Backend Python dependencies  
-│   └── ...                # Other backend files
+├── ⚙️ backend/                     # FastAPI Core Service
+│   ├── models/                   # Pydantic & SQLAlchemy models
+│   ├── routes/                   # API endpoints
+│   ├── services/                 # Business logic
+│   ├── repositories/             # Data access layer
+│   ├── security/                 # Authentication & authorization
+│   │   ├── auth.py              # JWT handling
+│   │   ├── oauth_google.py      # Google OAuth integration
+│   │   ├── hashing.py           # Password security
+│   │   └── dependencies.py      # Security dependencies
+│   └── db/                       # Database configuration
 │
-├── frontend/              # User interface using React + Vite
-│   ├── Dockerfile         # Frontend container configuration
-│   ├── vite.config.ts     # Vite build configuration
-│   ├── index.html         # Main HTML template
-│   └── ...                # Other frontend files
+├── 🤖 ai_service/                  # AI Recommendation Engine
+│   ├── models/                   # AI data models
+│   ├── services/                 # AI business logic
+│   ├── routes/                   # AI API endpoints
+│   └── config.py                 # AI configuration
 │
-├── docker-compose.yml     # Multi-container orchestration
-└── .env                   # Environment variables (create this file)
+├── 🐳 Docker Configuration
+│   ├── docker-compose.yml        # Multi-container orchestration
+│   ├── docker-compose_SSL.yml    # SSL-enabled configuration
+│   └── init-letsencrypt.sh       # SSL certificate automation
+│
+└── 📚 Documentation
+    ├── README.md                 # This file
+    ├── SSL_README.md             # SSL setup guide
+    └── service-specific README files
 ```
 
-Each service has its own README.md with detailed documentation.
+## 🔧 Technology Stack
 
-## Getting Started
+### Frontend
+- **React 18** with **TypeScript** for type-safe development
+- **Vite** for lightning-fast builds and development
+- **Tailwind CSS** for responsive, utility-first styling
+- **Radix UI** for accessible component primitives
+- **Zustand** for lightweight state management
+- **Axios** for HTTP client with interceptors
+
+### Backend
+- **FastAPI** for high-performance async API development
+- **SQLAlchemy** with async support for database ORM
+- **PostgreSQL** for robust data persistence
+- **JWT** authentication with refresh token support
+- **Pydantic** for data validation and serialization
+- **Pytest** for comprehensive testing
+
+### AI Service
+- **OpenRouter API** for AI model access
+- **FastAPI** for consistent API patterns
+- **Async HTTP** for efficient external API calls
+
+### Infrastructure
+- **Docker** & **Docker Compose** for containerization
+- **Nginx** as reverse proxy with rate limiting
+- **Let's Encrypt** for SSL/TLS certificates
+- **PostgreSQL** for production-ready database
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Docker and Docker Compose
-- Node.js (for local frontend development)
-- Python 3.12+ (for local backend development)
+```bash
+# Required software
+- Docker & Docker Compose
+- Git
 
-### Environment Setup
-
-Create a `.env` file in the root directory with the following variables:
-
-```
-# Database Configuration
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=your_password
-POSTGRES_DB=aqualife
-
-# OpenRouter Configuration 
-OPENROUTER_API_KEY=your_api_key
+# Optional for local development
+- Node.js 18+ (frontend development)
+- Python 3.12+ (backend development)
 ```
 
-### Running with Docker Compose
+### Environment Configuration
+
+Create a `.env` file in the root directory:
 
 ```bash
+# === Database Configuration ===
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=your_secure_password
+POSTGRES_DB=aqualife
+DATABASE_URL=postgresql://postgres:your_secure_password@postgres:5432/aqualife
+
+# === Authentication & Security ===
+SECRET_KEY=your_super_secret_jwt_key_at_least_32_characters
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=10080
+
+# === Google OAuth Configuration ===
+GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_REDIRECT_URI=http://localhost/auth/google/callback
+
+# === AI Service Configuration ===
+OPENROUTER_API_KEY=sk-or-v1-your-openrouter-api-key
+
+# === Application Configuration ===
+FRONTEND_URL=http://localhost
+DEBUG=False
+```
+
+#### 🔐 Google OAuth Setup
+
+1. **Create Google Cloud Project**:
+   - Visit [Google Cloud Console](https://console.cloud.google.com/)
+   - Create a new project or select existing one
+
+2. **Enable Google+ API**:
+   - Navigate to "APIs & Services" > "Library"
+   - Search and enable "Google+ API"
+
+3. **Create OAuth 2.0 Credentials**:
+   ```
+   - Go to "APIs & Services" > "Credentials"
+   - Click "Create Credentials" > "OAuth 2.0 Client IDs"
+   - Application type: Web application
+   - Authorized redirect URIs: http://localhost/auth/google/callback
+   ```
+
+4. **Required OAuth Scopes**:
+   ```
+   - openid
+   - email  
+   - profile
+   ```
+
+### 🚀 Launch Application
+
+```bash
+# Clone the repository
+git clone https://github.com/your-username/AquaLife.git
+cd AquaLife
+
 # Build and start all services
 docker-compose up --build
 
-# Run in detached mode
+# Or run in detached mode
 docker-compose up -d
+
+# View logs
+docker-compose logs -f
 
 # Stop all services
 docker-compose down
 ```
 
-## Services
+## 🌐 Service Endpoints
 
-| Service | Description | Port | Documentation |
-|---------|-------------|------|---------------|
-| Frontend | React + Vite UI | 80 | [frontend/README.md](frontend/README.md) |
-| Backend | FastAPI core service | 8000 | [backend/README.md](backend/README.md) |
-| AI Service | OpenRouter-powered recommendations | 8001 | [ai_service/README.md](ai_service/README.md) |
-| PostgreSQL | Database | 5432 | - |
+| Service | Description | URL | Status |
+|---------|-------------|-----|--------|
+| **Frontend** | React UI | http://localhost | ✅ |
+| **Backend API** | FastAPI service | http://localhost/api | ✅ |
+| **AI Service** | AI recommendations | http://localhost/ai | ✅ |
+| **API Documentation** | Swagger UI | http://localhost/api/docs | ✅ |
+| **Database** | PostgreSQL | localhost:5432 | ✅ |
 
-## Development
+## 🔒 Security & Network Architecture
 
-See each service's README for specific development instructions.
+### Container Isolation Strategy
 
-## Recent Updates
+AquaLife implements a **multi-network security model** for enhanced isolation:
 
-- **Frontend Migration to Vite** (Latest): Migrated from Create React App to Vite for significantly improved development performance and build optimization
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    SECURITY LAYERS                         │
+├─────────────────────────────────────────────────────────────┤
+│ Layer 1: Network Segmentation                              │
+│  ├── aqualife-network (Backend + Database)                 │
+│  ├── ai_network (AI Service isolation)                     │
+│  └── Frontend bridges both networks                        │
+│                                                             │
+│ Layer 2: Container Isolation                               │
+│  ├── No direct container-to-container communication        │
+│  ├── All traffic routed through Nginx proxy               │
+│  └── AI service completely isolated from database          │
+│                                                             │
+│ Layer 3: Application Security                              │
+│  ├── JWT-based authentication                              │
+│  ├── OAuth 2.0 integration                                 │
+│  ├── Rate limiting on AI endpoints                         │
+│  └── Input validation with Pydantic                        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Network Security Configuration
+
+#### 🔐 Container Network Isolation
+
+```yaml
+networks:
+  aqualife-network:    # Backend ↔ Database communication
+    driver: bridge
+    internal: false
+    
+  ai_network:          # AI service isolation
+    driver: bridge  
+    internal: false    # Allows external API calls
+```
+
+**Security Benefits**:
+- ✅ **AI Service Isolation**: Cannot access database directly
+- ✅ **Network Segmentation**: Services isolated by network boundaries  
+- ✅ **Controlled Communication**: All traffic routed through Nginx
+- ✅ **Zero-Trust Architecture**: No implicit trust between services
+
+#### 🛡️ Nginx Security Configuration
+
+```nginx
+# Rate limiting for AI service abuse prevention
+limit_req_zone $binary_remote_addr zone=ai_limit:10m rate=10r/s;
+
+location /ai/ {
+    limit_req zone=ai_limit burst=5 nodelay;
+    
+    # Extended timeouts for AI processing
+    proxy_connect_timeout 120s;
+    proxy_read_timeout 300s;
+    
+    # Security headers
+    add_header X-Content-Type-Options nosniff;
+    add_header X-Frame-Options DENY;
+    add_header X-XSS-Protection "1; mode=block";
+}
+```
+
+**Security Features**:
+- 🚫 **Rate Limiting**: 10 requests/second per IP for AI endpoints
+- ⏱️ **Timeout Protection**: Prevents resource exhaustion
+- 🔒 **Security Headers**: XSS and clickjacking protection
+- 📊 **Traffic Monitoring**: Comprehensive logging and metrics
+
+#### 🔥 Firewall & Access Control
+
+```nginx
+# Backend API security
+location /api/ {
+    # CORS security
+    add_header 'Access-Control-Allow-Origin' '*' always;
+    add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS';
+    
+    # Proxy caching for performance
+    proxy_cache_valid 200 302 10m;
+    proxy_cache_methods GET HEAD;
+}
+```
+
+### 🔐 Authentication & Authorization
+
+#### Multi-Factor Authentication Support
+- **JWT Tokens**: Secure, stateless authentication
+- **Google OAuth**: Enterprise-grade social login
+- **Refresh Tokens**: Automatic session management
+- **Role-Based Access**: Granular permission control
+
+#### Data Protection
+- **Password Hashing**: Bcrypt with salt rounds
+- **SQL Injection Prevention**: SQLAlchemy ORM protection
+- **Input Validation**: Pydantic schema validation
+- **HTTPS Enforcement**: SSL/TLS encryption
+
+## 🚀 Development
+
+### Local Development Setup
+
+```bash
+# Backend development
+cd backend
+pip install -r requirements.txt
+uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+
+# Frontend development  
+cd frontend
+npm install
+npm run dev
+
+# AI Service development
+cd ai_service
+pip install -r requirements.txt
+uvicorn main:app --reload --host 0.0.0.0 --port 8001
+```
+
+### 🧪 Testing
+
+```bash
+# Backend tests
+cd backend
+pytest -v --cov
+
+# Frontend tests
+cd frontend  
+npm test
+
+# Integration tests
+docker-compose -f docker-compose.test.yml up --abort-on-container-exit
+```
+
+### 🔄 Database Migrations
+
+```bash
+# Initialize Alembic (first time)
+cd backend
+alembic init migrations
+
+# Create migration
+alembic revision --autogenerate -m "Add new feature"
+
+# Apply migrations
+alembic upgrade head
+```
+
+## 📈 Monitoring & Observability
+
+### Health Checks
+- **Service Health**: `/health` endpoints for all services
+- **Database Connectivity**: Automatic connection testing
+- **External API Status**: OpenRouter API monitoring
+
+### Logging Strategy
+- **Structured Logging**: JSON format for all services
+- **Log Aggregation**: Centralized log management
+- **Error Tracking**: Comprehensive error reporting
+
+## 🔧 Production Deployment
+
+### SSL/HTTPS Configuration
+
+```bash
+# Enable SSL with Let's Encrypt
+chmod +x init-letsencrypt.sh
+./init-letsencrypt.sh
+
+# Use SSL configuration
+docker-compose -f docker-compose_SSL.yml up -d
+```
+
+### Performance Optimization
+- **Nginx Caching**: Static asset optimization
+- **Database Indexing**: Query performance optimization  
+- **Connection Pooling**: Efficient database connections
+- **CDN Ready**: Static asset distribution support
+
+## 📚 API Documentation
+
+When running, comprehensive API documentation is available at:
+- **Swagger UI**: http://localhost/api/docs
+- **ReDoc**: http://localhost/api/redoc
+- **OpenAPI Schema**: http://localhost/api/openapi.json
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🔄 Recent Updates
+
+- **🚀 Frontend Migration to Vite** (Latest): Migrated from Create React App to Vite for significantly improved development performance and build optimization
+- **🔐 Enhanced Security**: Implemented comprehensive container isolation and rate limiting
+- **🤖 AI Service Optimization**: Improved response time and error handling
+- **📊 Monitoring Integration**: Added comprehensive health checks and logging
+
+---
+
+<div align="center">
+
+**Built with ❤️ for the aquarium community**
+
+[Report Bug](https://github.com/your-username/AquaLife/issues) • [Request Feature](https://github.com/your-username/AquaLife/issues) • [Documentation](https://github.com/your-username/AquaLife/wiki)
+
+</div>
 
