@@ -114,7 +114,6 @@ AquaLife/
 ### Infrastructure
 - **Docker** & **Docker Compose** for containerization
 - **Nginx** as reverse proxy with rate limiting
-- **Let's Encrypt** for SSL/TLS certificates
 - **PostgreSQL** for production-ready database
 
 ## 🚀 Quick Start
