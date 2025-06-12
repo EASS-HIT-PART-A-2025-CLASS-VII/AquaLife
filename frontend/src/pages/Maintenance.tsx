@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { AquariumService } from '../services/aquariumService';
 import { TankMaintenanceService } from '../services/tankMaintenanceService';
 import { TankMaintenance, TankMaintenanceCreate } from '../types/tankMaintenance';
@@ -30,6 +31,7 @@ interface MaintenanceProps {
 
 export function Maintenance({ onStatsUpdate }: MaintenanceProps) {
   const { user } = useAuth();
+  const { isDarkMode } = useTheme();
   const [layouts, setLayouts] = useState<AquariumLayout[]>([]);
   const [selectedLayoutId, setSelectedLayoutId] = useState<number | null>(null);
   const [maintenance, setMaintenance] = useState<TankMaintenance[]>([]);

@@ -5,6 +5,7 @@ import { RegisterPage } from './pages/RegisterPage';
 import { Dashboard } from './pages/Dashboard';
 import { GoogleCallback } from './pages/GoogleCallback';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 // Protected Route component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -34,9 +35,11 @@ function AppRoutes() {
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <AppRoutes />
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </ThemeProvider>
     </Router>
   );
 }
