@@ -517,12 +517,6 @@ OPENROUTER_MODEL=google/gemma-2-9b-it:free
 DEBUG=False
 ```
 
-## 📄 API Documentation
-
-When running, interactive API documentation is available at:
-- **Swagger UI**: http://localhost:8001/docs
-- **ReDoc**: http://localhost:8001/redoc
-
 ## 🚀 Performance & Optimization
 
 ### Response Time Optimization
