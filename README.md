@@ -2,7 +2,8 @@
 
 <div align="center">
 
-![AquaLife Logo](https://github.com/user-attachments/assets/d942ce66-923b-4595-acb0-0cbbf4220e1e)
+![image](https://github.com/user-attachments/assets/6a64e21e-cdf0-48be-bad2-536c1c55b7a0)
+
 
 **A sophisticated containerized microservices application for intelligent aquarium management with AI-powered advisory capabilities.**
 
