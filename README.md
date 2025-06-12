@@ -352,19 +352,6 @@ npm test
 docker-compose -f docker-compose.test.yml up --abort-on-container-exit
 ```
 
-### 🔄 Database Migrations
-
-```bash
-# Initialize Alembic (first time)
-cd backend
-alembic init migrations
-
-# Create migration
-alembic revision --autogenerate -m "Add new feature"
-
-# Apply migrations
-alembic upgrade head
-```
 
 ## 📈 Monitoring & Observability
 
@@ -385,37 +372,10 @@ alembic upgrade head
 - **Connection Pooling**: Efficient database connections
 - **CDN Ready**: Static asset distribution support
 
-## 📚 API Documentation
 
-When running, comprehensive API documentation is available at:
-- **Swagger UI**: http://localhost/api/docs
-- **ReDoc**: http://localhost/api/redoc
-- **OpenAPI Schema**: http://localhost/api/openapi.json
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
-
-## 🔄 Recent Updates
-
-- **🚀 Frontend Migration to Vite** (Latest): Migrated from Create React App to Vite for significantly improved development performance and build optimization
-- **🔐 Enhanced Security**: Implemented comprehensive container isolation and rate limiting
-- **🤖 AI Service Optimization**: Improved response time and error handling
-- **📊 Monitoring Integration**: Added comprehensive health checks and logging
-
----
-
-<div align="center">
 
 **Built with ❤️ for the aquarium community**
 
-[Report Bug](https://github.com/your-username/AquaLife/issues) • [Request Feature](https://github.com/your-username/AquaLife/issues) • [Documentation](https://github.com/your-username/AquaLife/wiki)
 
 </div>
 
