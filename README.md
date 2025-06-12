@@ -46,30 +46,29 @@ AquaLife implements a secure, scalable microservices architecture with advanced 
 
 ```
 AquaLife/
-├── 🎨 frontend/                    # React + Vite + TypeScript UI
+├── 🎨 frontend/                  # React + Vite + TypeScript UI
 │   ├── src/
-│   │   ├── components/            # Reusable UI components
-│   │   ├── pages/                 # Application pages
-│   │   └── services/              # API integration
-│   ├── nginx/                     # Nginx configuration
+│   │   ├── components/           # Reusable UI components
+│   │   ├── pages/                # Application pages
+│   │   └── services/             # API integration
+│   ├── nginx/                    # Nginx configuration
 │   │   ├── nginx.conf            # Main Nginx config
 │   │   ├── default.conf          # Server block config
-│   │   └── default_SSL.conf      # SSL configuration
 │   └── Dockerfile                # Frontend container
 │
-├── ⚙️ backend/                     # FastAPI Core Service
+├── ⚙️ backend/                   # FastAPI Core Service
 │   ├── models/                   # Pydantic & SQLAlchemy models
 │   ├── routes/                   # API endpoints
 │   ├── services/                 # Business logic
 │   ├── repositories/             # Data access layer
 │   ├── security/                 # Authentication & authorization
-│   │   ├── auth.py              # JWT handling
-│   │   ├── oauth_google.py      # Google OAuth integration
-│   │   ├── hashing.py           # Password security
-│   │   └── dependencies.py      # Security dependencies
+│   │   ├── auth.py               # JWT handling
+│   │   ├── oauth_google.py       # Google OAuth integration
+│   │   ├── hashing.py            # Password security
+│   │   └── dependencies.py       # Security dependencies
 │   └── db/                       # Database configuration
 │
-├── 🤖 ai_service/                  # AI Recommendation Engine
+├── 🤖 ai_service/                # AI Recommendation Engine
 │   ├── models/                   # AI data models
 │   ├── services/                 # AI business logic
 │   ├── routes/                   # AI API endpoints
@@ -77,12 +76,9 @@ AquaLife/
 │
 ├── 🐳 Docker Configuration
 │   ├── docker-compose.yml        # Multi-container orchestration
-│   ├── docker-compose_SSL.yml    # SSL-enabled configuration
-│   └── init-letsencrypt.sh       # SSL certificate automation
 │
 └── 📚 Documentation
     ├── README.md                 # This file
-    ├── SSL_README.md             # SSL setup guide
     └── service-specific README files
 ```
 
