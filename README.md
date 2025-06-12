@@ -7,21 +7,13 @@
 
 **A sophisticated containerized microservices application for intelligent aquarium management with AI-powered advisory capabilities.**
 
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-55%25-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-35%25-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Docker](https://img.shields.io/badge/Docker-10%25-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://reactjs.org/)
 
 </div>
-
-## 📊 Code Statistics
-
-| Language | Files | Percentage |
-|----------|-------|------------|
-| **Python** | 45+ | ~55% |
-| **TypeScript/JavaScript** | 30+ | ~35% |
-| **Docker/Config** | 8+ | ~10% |
 
 ## 🏗️ Architecture Overview
 
