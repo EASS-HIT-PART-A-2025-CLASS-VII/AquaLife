@@ -136,10 +136,7 @@ pip install -r requirements.txt
 # 4. Set up environment variables (see Configuration section)
 cp .env.example .env
 
-# 5. Initialize database
-alembic upgrade head
-
-# 6. Run development server
+# 5. Run development server
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
@@ -213,7 +210,7 @@ GOOGLE_REDIRECT_URI=http://localhost/auth/google/callback
 4. **Database Operations**:
    - SQLAlchemy models define the database schema
    - Repositories provide data access abstractions
-   - Alembic manages schema migrations
+
 
 ## 🌐 API Endpoints
 
@@ -265,26 +262,6 @@ GOOGLE_REDIRECT_URI=http://localhost/auth/google/callback
 - **CORS Configuration**: Controlled cross-origin access
 - **Security Headers**: XSS and CSRF protection
 
-## 🗄️ Database Management
-
-### Migrations with Alembic
-
-```bash
-# Initialize Alembic (first time only)
-alembic init migrations
-
-# Create a new migration
-alembic revision --autogenerate -m "Add new feature"
-
-# Apply migrations
-alembic upgrade head
-
-# Rollback migration
-alembic downgrade -1
-
-# View migration history
-alembic history
-```
 
 ### Database Schema
 
@@ -346,13 +323,6 @@ fastapi-backend:
     - .env
 ```
 
-## 📚 API Documentation
-
-When running locally, comprehensive API documentation is available at:
-
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-- **OpenAPI Schema**: http://localhost:8000/openapi.json
 
 ## 🚀 Production Considerations
 
