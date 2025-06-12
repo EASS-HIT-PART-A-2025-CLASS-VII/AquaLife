@@ -6,7 +6,6 @@
 
 **A sophisticated containerized microservices application for intelligent aquarium management with AI-powered advisory capabilities.**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)](https://www.python.org/)
@@ -386,18 +385,6 @@ alembic upgrade head
 - **Log Aggregation**: Centralized log management
 - **Error Tracking**: Comprehensive error reporting
 
-## 🔧 Production Deployment
-
-### SSL/HTTPS Configuration
-
-```bash
-# Enable SSL with Let's Encrypt
-chmod +x init-letsencrypt.sh
-./init-letsencrypt.sh
-
-# Use SSL configuration
-docker-compose -f docker-compose_SSL.yml up -d
-```
 
 ### Performance Optimization
 - **Nginx Caching**: Static asset optimization
@@ -421,10 +408,6 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 3. Commit your changes: `git commit -m 'Add amazing feature'`
 4. Push to the branch: `git push origin feature/amazing-feature`
 5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🔄 Recent Updates
 
