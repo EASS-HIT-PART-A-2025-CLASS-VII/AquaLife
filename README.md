@@ -16,6 +16,7 @@
 </div>
 
 ## 🏗️ Architecture Overview
+![image](https://github.com/user-attachments/assets/56238c1a-66d1-4343-9330-059a8f62a7b4)
 
 AquaLife implements a secure, scalable microservices architecture with advanced container isolation and intelligent networking:
 
