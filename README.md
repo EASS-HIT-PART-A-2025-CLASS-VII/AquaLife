@@ -210,7 +210,6 @@ docker-compose down
 | **Frontend** | React UI | http://localhost | ✅ |
 | **Backend API** | FastAPI service | http://localhost/api | ✅ |
 | **AI Service** | AI recommendations | http://localhost/ai | ✅ |
-| **API Documentation** | Swagger UI | http://localhost/api/docs | ✅ |
 | **Database** | PostgreSQL | localhost:5432 | ✅ |
 
 ## 🔒 Security & Network Architecture
