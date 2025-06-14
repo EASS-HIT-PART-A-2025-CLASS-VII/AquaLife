@@ -242,289 +242,214 @@ export function Maintenance({ onStatsUpdate }: MaintenanceProps) {
   return (
     <div className="space-y-6">
       {/* Layout Selection */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-2xl font-bold mb-6 flex items-center text-gray-900">
-          <WrenchScrewdriverIcon className="h-6 w-6 mr-2 text-gray-700" />
+      <div className={`rounded-lg shadow p-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+        <h2 className="text-2xl font-bold mb-6 flex items-center text-gray-900 dark:text-white">
+          <WrenchScrewdriverIcon className="h-6 w-6 mr-2 text-gray-700 dark:text-gray-300" />
           Tank Maintenance
         </h2>
         
-        {layouts.length === 0 ? (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-            <div className="flex items-center">
-              <WrenchScrewdriverIcon className="h-6 w-6 text-yellow-600 mr-3" />
-              <div>
-                <h3 className="font-semibold text-yellow-800">No Tank Layouts Found</h3>
-                <p className="text-yellow-700 text-sm">
-                  You need to create a tank layout first. Go to the <strong>Design</strong> tab to create your first aquarium layout.
-                </p>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <select
-                value={selectedLayoutId ?? ''}
-                onChange={(e) => setSelectedLayoutId(Number(e.target.value))}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-              >
-                <option value="">Select a tank</option>
-                {layouts.map((layout) => (
-                  <option key={layout.id} value={layout.id}>
-                    {layout.tank_name} ({layout.water_type})
-                  </option>
-                ))}
-              </select>
-              <button
-                onClick={() => setShowCreateForm(true)}
-                className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                <PlusIcon className="h-5 w-5 mr-2" />
-                Add Maintenance
-              </button>
-            </div>
+        {/* Tank Selection Dropdown */}
+        <div className="mb-6">
+          <label htmlFor="tank-select" className={`block text-base font-semibold ${isDarkMode ? 'text-gray-300' : 'text-black'} mb-2`}>
+            Select Tank
+          </label>
+          <select
+            id="tank-select"
+            value={selectedLayoutId || ''}
+            onChange={(e) => setSelectedLayoutId(Number(e.target.value))}
+            className={`block w-full max-w-md rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm
+              ${isDarkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+          >
+            {layouts.map((layout) => (
+              <option key={layout.id} value={layout.id}>
+                {layout.tank_name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-            {selectedLayout && (
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">{selectedLayout.tank_name}</h3>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="text-gray-500">Dimensions:</span>{' '}
-                    {(() => {
-                      const dimensions = convertCmToInchesForDisplay(selectedLayout.tank_length, selectedLayout.tank_width, selectedLayout.tank_height);
-                      return `${dimensions.length}" × ${dimensions.width}" × ${dimensions.height}"`;
-                    })()}
-                  </div>
-                  <div>
-                    <span className="text-gray-500">Volume:</span>{' '}
-                    {`${calculateTankVolumeGallons(selectedLayout.tank_length, selectedLayout.tank_width, selectedLayout.tank_height)} gallons`}
-                  </div>
-                  <div>
-                    <span className="text-gray-500">Water Type:</span>{' '}
-                    {selectedLayout.water_type}
-                  </div>
-                </div>
+        {/* Tank Properties */}
+        {selectedLayout && (
+          <div className={`mb-6 p-4 rounded-lg border ${isDarkMode ? 'bg-gray-700/50 border-gray-600' : 'bg-gray-50 border-gray-200'}`}>
+            <h3 className={`text-xl font-bold mb-3 ${isDarkMode ? 'text-white' : 'text-black'}`}>{selectedLayout.tank_name}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+              <div className={`${isDarkMode ? 'text-gray-300' : 'text-black'} font-medium`}>
+                <span className="font-semibold">Dimensions:</span> {(() => {
+                  const dimensions = convertCmToInchesForDisplay(selectedLayout.tank_length, selectedLayout.tank_width, selectedLayout.tank_height);
+                  return `${dimensions.length}" × ${dimensions.width}" × ${dimensions.height}"`;
+                })()}
               </div>
-            )}
+              <div className={`${isDarkMode ? 'text-gray-300' : 'text-black'} font-medium`}>
+                <span className="font-semibold">Volume:</span> {calculateTankVolumeGallons(selectedLayout.tank_length, selectedLayout.tank_width, selectedLayout.tank_height)} gallons
+              </div>
+              <div className={`${isDarkMode ? 'text-gray-300' : 'text-black'} font-medium`}>
+                <span className="font-semibold">Water Type:</span> {selectedLayout.water_type}
+              </div>
+            </div>
           </div>
         )}
-      </div>
 
-      {/* Maintenance List */}
-      {selectedLayoutId && (
-        <div className="bg-white rounded-lg shadow">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-medium text-gray-900">Maintenance History</h3>
-          </div>
-          <div className="divide-y divide-gray-200">
-            {isLoading ? (
-              <div className="p-4 text-center text-gray-500">Loading...</div>
-            ) : maintenance.length === 0 ? (
-              <div className="p-4 text-center text-gray-500">No maintenance records found</div>
-            ) : (
-              maintenance.map((item) => (
-                <div key={item.id} className="p-4 hover:bg-gray-50">
-                  {editingId === item.id ? (
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label htmlFor="maintenance_type" className="block text-sm font-medium text-gray-700">
-                            Type
-                          </label>
-                          <select
-                            id="maintenance_type"
-                            value={formData.maintenance_type}
-                            onChange={(e) => setFormData(prev => ({ ...prev, maintenance_type: e.target.value }))}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                          >
-                            <option value="Water Change">Water Change</option>
-                            <option value="Filter Maintenance">Filter Maintenance</option>
-                            <option value="Water Testing">Water Testing</option>
-                            <option value="Feeding">Feeding</option>
-                            <option value="Other">Other</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label htmlFor="maintenance_date" className="block text-sm font-medium text-gray-700">
-                            Date
-                          </label>
-                          <input
-                            type="datetime-local"
-                            id="maintenance_date"
-                            value={formData.maintenance_date?.toISOString().slice(0, 16) ?? ''}
-                            onChange={(e) => setFormData(prev => ({ ...prev, maintenance_date: new Date(e.target.value) }))}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-                          Description
-                        </label>
-                        <input
-                          type="text"
-                          id="description"
-                          value={formData.description}
-                          onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
-                          Notes
-                        </label>
-                        <textarea
-                          id="notes"
-                          value={formData.notes}
-                          onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
-                          rows={3}
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                        />
-                      </div>
-                      <div className="flex justify-end space-x-3">
-                        <button
-                          onClick={cancelEdit}
-                          className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          onClick={() => handleUpdate(item.id)}
-                          className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                        >
-                          Save Changes
-                        </button>
-                      </div>
+        {/* Add Maintenance Button */}
+        <button
+          onClick={() => setShowCreateForm(true)}
+          className={`inline-flex items-center px-4 py-2 rounded-lg transition-all duration-200
+            ${isDarkMode 
+              ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/20' 
+              : 'bg-blue-500 hover:bg-blue-600 text-white shadow-lg shadow-blue-500/30'
+            }`}
+        >
+          <PlusIcon className="h-5 w-5 mr-2" />
+          Add Maintenance
+        </button>
+
+        {/* Maintenance History */}
+        <div className="mt-8">
+          <h3 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-black'}`}>Maintenance History</h3>
+          <div className="space-y-4">
+            {maintenance.map((item) => (
+              <div 
+                key={item.id}
+                className={`p-4 rounded-lg border transition-all duration-200
+                  ${isDarkMode 
+                    ? 'bg-gray-700/50 border-gray-600 hover:bg-gray-700' 
+                    : 'bg-white border-gray-200 hover:bg-gray-50'
+                  }`}
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium
+                        ${item.completed === 1 
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' 
+                          : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
+                        }`}
+                      >
+                        {item.maintenance_type}
+                      </span>
+                      <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-black'}`}>
+                        {new Date(item.maintenance_date).toLocaleDateString()} {new Date(item.maintenance_date).toLocaleTimeString()}
+                      </span>
                     </div>
-                  ) : (
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center">
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            item.completed === 1 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                          }`}>
-                            {item.completed === 1 ? 'Completed' : 'Pending'}
-                          </span>
-                          <span className="ml-2 text-sm font-medium text-gray-900">{item.maintenance_type}</span>
-                        </div>
-                        <div className="mt-1 text-sm text-gray-500">
-                          {new Date(item.maintenance_date).toLocaleString()}
-                        </div>
-                        {item.description && (
-                          <div className="mt-1 text-sm text-gray-700">{item.description}</div>
-                        )}
-                        {item.notes && (
-                          <div className="mt-2 text-sm text-gray-600">{item.notes}</div>
-                        )}
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <button
-                          onClick={() => toggleCompleted(item)}
-                          className={`p-2 rounded-full ${
-                            item.completed === 1
-                              ? 'text-green-600 hover:bg-green-100'
-                              : 'text-yellow-600 hover:bg-yellow-100'
-                          }`}
-                        >
-                          {item.completed === 1 ? (
-                            <CheckIcon className="h-5 w-5" />
-                          ) : (
-                            <XMarkIcon className="h-5 w-5" />
-                          )}
-                        </button>
-                        <button
-                          onClick={() => startEdit(item)}
-                          className="p-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100"
-                        >
-                          <PencilIcon className="h-5 w-5" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(item.id)}
-                          className="p-2 text-gray-400 hover:text-red-500 rounded-full hover:bg-gray-100"
-                        >
-                          <TrashIcon className="h-5 w-5" />
-                        </button>
-                      </div>
+                    <div className={`flex items-center gap-2 ${isDarkMode ? 'text-gray-300' : 'text-black'}`}>
+                      <span className="font-medium">Description:</span>
+                      <span>{item.description}</span>
+                      {item.notes && (
+                        <>
+                          <span className="text-gray-400">•</span>
+                          <span className="font-medium">Notes:</span>
+                          <span>{item.notes}</span>
+                        </>
+                      )}
                     </div>
-                  )}
+                  </div>
+                  <div className="flex items-center gap-2 ml-4">
+                    <button
+                      onClick={() => toggleCompleted(item)}
+                      className={`p-2 rounded-full transition-colors
+                        ${item.completed === 1
+                          ? 'text-green-600 hover:bg-green-100 dark:text-green-400 dark:hover:bg-green-900/30'
+                          : 'text-gray-400 hover:bg-gray-100 dark:text-gray-500 dark:hover:bg-gray-700'
+                        }`}
+                    >
+                      <CheckIcon className="h-5 w-5" />
+                    </button>
+                    <button
+                      onClick={() => startEdit(item)}
+                      className="p-2 text-blue-600 hover:bg-blue-100 rounded-full transition-colors dark:text-blue-400 dark:hover:bg-blue-900/30"
+                    >
+                      <PencilIcon className="h-5 w-5" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="p-2 text-red-600 hover:bg-red-100 rounded-full transition-colors dark:text-red-400 dark:hover:bg-red-900/30"
+                    >
+                      <TrashIcon className="h-5 w-5" />
+                    </button>
+                  </div>
                 </div>
-              ))
-            )}
+              </div>
+            ))}
           </div>
         </div>
-      )}
+      </div>
 
       {/* Create Form Modal */}
       {showCreateForm && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Add Maintenance Record</h3>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className={`rounded-lg shadow-xl max-w-md w-full ${isDarkMode ? 'bg-gray-800' : 'bg-white'} p-6`}>
+            <h3 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-black'}`}>Add Maintenance Record</h3>
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="create_maintenance_type" className="block text-sm font-medium text-gray-700">
-                    Type
-                  </label>
-                  <select
-                    id="create_maintenance_type"
-                    value={formData.maintenance_type}
-                    onChange={(e) => setFormData(prev => ({ ...prev, maintenance_type: e.target.value }))}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                  >
-                    <option value="Water Change">Water Change</option>
-                    <option value="Filter Maintenance">Filter Maintenance</option>
-                    <option value="Water Testing">Water Testing</option>
-                    <option value="Feeding">Feeding</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="create_maintenance_date" className="block text-sm font-medium text-gray-700">
-                    Date
-                  </label>
-                  <input
-                    type="datetime-local"
-                    id="create_maintenance_date"
-                    value={formData.maintenance_date?.toISOString().slice(0, 16) ?? ''}
-                    onChange={(e) => setFormData(prev => ({ ...prev, maintenance_date: new Date(e.target.value) }))}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                  />
-                </div>
+              <div>
+                <label htmlFor="maintenance_type" className={`block text-sm font-semibold ${isDarkMode ? 'text-gray-300' : 'text-black'} mb-1`}>
+                  Type
+                </label>
+                <select
+                  id="maintenance_type"
+                  value={formData.maintenance_type}
+                  onChange={(e) => setFormData(prev => ({ ...prev, maintenance_type: e.target.value }))}
+                  className={`block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm
+                    ${isDarkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+                >
+                  <option value="Water Change">Water Change</option>
+                  <option value="Filter Maintenance">Filter Maintenance</option>
+                  <option value="Water Testing">Water Testing</option>
+                  <option value="Feeding">Feeding</option>
+                  <option value="Other">Other</option>
+                </select>
               </div>
               <div>
-                <label htmlFor="create_description" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="maintenance_date" className={`block text-sm font-semibold ${isDarkMode ? 'text-gray-300' : 'text-black'} mb-1`}>
+                  Date
+                </label>
+                <input
+                  type="datetime-local"
+                  id="maintenance_date"
+                  value={formData.maintenance_date?.toISOString().slice(0, 16) ?? ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, maintenance_date: new Date(e.target.value) }))}
+                  className={`block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm
+                    ${isDarkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+                />
+              </div>
+              <div>
+                <label htmlFor="description" className={`block text-sm font-semibold ${isDarkMode ? 'text-gray-300' : 'text-black'} mb-1`}>
                   Description
                 </label>
                 <input
                   type="text"
-                  id="create_description"
+                  id="description"
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                  className={`block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm
+                    ${isDarkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
                 />
               </div>
               <div>
-                <label htmlFor="create_notes" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="notes" className={`block text-sm font-semibold ${isDarkMode ? 'text-gray-300' : 'text-black'} mb-1`}>
                   Notes
                 </label>
                 <textarea
-                  id="create_notes"
+                  id="notes"
                   value={formData.notes}
                   onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
                   rows={3}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                  className={`block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm
+                    ${isDarkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
                 />
               </div>
-              <div className="flex justify-end space-x-3">
+              <div className="flex justify-end space-x-3 mt-6">
                 <button
                   onClick={() => setShowCreateForm(false)}
-                  className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className={`px-4 py-2 rounded-md text-sm font-medium
+                    ${isDarkMode 
+                      ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+                      : 'bg-gray-100 text-black hover:bg-gray-200'
+                    }`}
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleCreate}
-                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
                 >
                   Create
                 </button>
