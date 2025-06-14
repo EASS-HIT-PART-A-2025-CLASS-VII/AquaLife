@@ -108,11 +108,7 @@ export const FishCatalog: React.FC<FishCatalogProps> = ({
   };
 
   return (
-    <div className={`rounded-lg shadow border p-6 ${isDarkMode ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-200'}`}>
-      <h3 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
-        Fish Catalog ({availableFish.length} species available)
-      </h3>
-      
+    <div>
       {renderContent()}
     </div>
   );

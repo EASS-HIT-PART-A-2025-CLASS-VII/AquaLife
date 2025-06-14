@@ -52,14 +52,20 @@ Estimated capacity: {estimated_capacity} inches of fish
 
 Current fish: {fish_list} (total: {total_fish} fish)
 
-Please evaluate:
-1. Tank volume is correct at {volume_gallons} gallons
-2. Current bioload vs capacity  
-3. Fish compatibility and behavior
-4. Any schooling requirements
-5. Recommendations
-6. Overall rating 1-10
+Your response MUST follow this EXACT format with these sections:
+🔵 Tank Volume Assessment
+🟡 Bioload Assessment
+🟣 Fish Compatibility & Behavior
+🟢 Schooling Requirements
+✅ Recommendations
+⭐ Overall Rating
+
+Each section must:
+1. Start with the exact header shown above
+2. Be separated by a blank line
+3. Contain relevant information concisely
+4. Be based on the provided tank and fish data
 
 {f"Notes: {layout.comments}" if layout.comments else ""}
 
-Provide a concise professional assessment."""
+Provide a professional assessment following the required format."""

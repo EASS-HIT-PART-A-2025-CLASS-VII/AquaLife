@@ -15,14 +15,13 @@ interface ParsedSections {
   overallRating: string;
 }
 
-// Enhanced regular expressions for more flexible section matching
 const SECTION_PATTERNS = {
-  tankVolume: /^(\d+[\.\)]?\s*)?([🔵].*Tank Volume|Tank Volume)/i,
-  bioload: /^(\d+[\.\)]?\s*)?([🟡].*Bioload|Bioload)/i,
-  fishCompatibility: /^(\d+[\.\)]?\s*)?([🟣].*Fish Compatibility|Fish Compatibility|Compatibility)/i,
-  schoolingRequirements: /^(\d+[\.\)]?\s*)?([🟢].*Schooling|Schooling)/i,
-  recommendations: /^(\d+[\.\)]?\s*)?([✅].*Recommendations|Expert Recommendations|Recommendations)/i,
-  overallRating: /^(\d+[\.\)]?\s*)?([⭐].*Overall Rating|Overall Rating|Rating)/i,
+  tankVolume: /^🔵\s*Tank Volume/i,
+  bioload: /^🟡\s*Bioload/i,
+  fishCompatibility: /^🟣\s*Fish Compatibility/i,
+  schoolingRequirements: /^🟢\s*Schooling/i,
+  recommendations: /^✅\s*Recommendations/i,
+  overallRating: /^⭐\s*Overall Rating/i,
 } as const;
 
 const SKIP_LINES = [
@@ -43,7 +42,7 @@ export const AIEvaluationResult: React.FC<AIEvaluationResultProps> = ({ evaluati
       .trim()
       .split('\n')
       .map(line => line.trim())
-      .filter(line => line);
+      .filter(Boolean);
   };
 
   const shouldSkipLine = (line: string): boolean => {
@@ -60,7 +59,7 @@ export const AIEvaluationResult: React.FC<AIEvaluationResultProps> = ({ evaluati
       .trim();
   };
 
-  const determineSectionType = (line: string): keyof ParsedSections | null => {
+  const getSectionType = (line: string): keyof ParsedSections | null => {
     // Handle specific numbered emoji format (e.g., "1🔵 Tank Volume Analysis")
     if (/^\d*🔵.*Tank Volume/i.test(line)) return 'tankVolume';
     if (/^\d*🟡.*Bioload/i.test(line)) return 'bioload';
@@ -116,62 +115,45 @@ export const AIEvaluationResult: React.FC<AIEvaluationResultProps> = ({ evaluati
     // Log the raw response for debugging
     console.log('Raw AI Response:', response);
 
-    // Split by numbered sections at start of line (more precise)
-    const sectionSplits = response.split(/(?=^\*\*\d+\.\s)/m);
-    
-    for (const section of sectionSplits) {
-      const lines = section.trim().split('\n').filter(line => line.trim());
-      if (lines.length === 0) continue;
-      
-      const firstLine = lines[0];
-      let sectionType: keyof ParsedSections | null = null;
-      
-      // Determine section type from first line (more precise matching)
-      if (/^\*\*1\.\s.*tank.*volume/i.test(firstLine)) {
-        sectionType = 'tankVolume';
-      } else if (/^\*\*2\.\s.*bioload/i.test(firstLine)) {
-        sectionType = 'bioload';
-      } else if (/^\*\*3\.\s.*(?:compatibility|fish)/i.test(firstLine)) {
-        sectionType = 'fishCompatibility';
-      } else if (/^\*\*4\.\s.*schooling/i.test(firstLine)) {
-        sectionType = 'schoolingRequirements';
-      } else if (/^\*\*5\.\s.*recommendation/i.test(firstLine)) {
-        sectionType = 'recommendations';
-      } else if (/^\*\*6\.\s.*(?:rating|overall)/i.test(firstLine)) {
-        sectionType = 'overallRating';
-      }
-      
-      console.log('Section detected:', sectionType, 'from line:', firstLine);
+    const lines = response.split('\n').map(line => line.trim()).filter(Boolean);
+    let currentSection: keyof ParsedSections | null = null;
+    let currentContent: string[] = [];
+
+    for (const line of lines) {
+      // Check if this is a section header
+      const sectionType = getSectionType(line);
       
       if (sectionType) {
-        // Extract content from the header line itself (after the colon)
-        const headerContent = firstLine.split(':').slice(1).join(':').trim();
-        
-        // Get additional content lines (skip the header)
-        const additionalLines = lines.slice(1)
-          .filter(line => !shouldSkipLine(line))
-          .map(line => line.trim())
-          .filter(line => line && line !== '**');
-        
-        // Combine header content with additional lines
-        const allContent = [];
-        if (headerContent && headerContent !== '**') {
-          allContent.push(headerContent);
+        // If we were processing a previous section, save its content
+        if (currentSection && currentContent.length > 0) {
+          if (currentSection === 'overallRating') {
+            sections.overallRating = currentContent.join(' ');
+          } else {
+            sections[currentSection] = currentContent;
+          }
         }
-        allContent.push(...additionalLines);
         
-        // Clean up markdown formatting (remove ** but keep bullet points)
-        const cleanedContent = allContent.map(line => 
-          line.replace(/\*\*/g, '').trim() // Remove all ** markers
-        ).filter(line => line); // Remove empty lines after cleaning
+        // Start new section
+        currentSection = sectionType;
+        currentContent = [];
         
-        console.log('Content for', sectionType, ':', cleanedContent);
-        
-        if (sectionType === 'overallRating') {
-          sections.overallRating = cleanedContent.join(' ');
-        } else {
-          sections[sectionType] = cleanedContent;
+        // Extract content from the header line if any
+        const headerContent = line.split(/^[🔵🟡🟣🟢✅⭐]\s*/i)[1]?.split(':')[1]?.trim();
+        if (headerContent) {
+          currentContent.push(headerContent);
         }
+      } else if (currentSection && !shouldSkipLine(line)) {
+        // Add content to current section
+        currentContent.push(line);
+      }
+    }
+
+    // Don't forget to save the last section
+    if (currentSection && currentContent.length > 0) {
+      if (currentSection === 'overallRating') {
+        sections.overallRating = currentContent.join(' ');
+      } else {
+        sections[currentSection] = currentContent;
       }
     }
 
@@ -266,20 +248,21 @@ export const AIEvaluationResult: React.FC<AIEvaluationResultProps> = ({ evaluati
     
     if (ratingNum !== null) {
       const colors = getRatingColors(ratingNum);
-      
+
       return (
-        <div className={`p-3 rounded-lg border-2 ${colors.bg}`}>
-          <div className={`font-bold text-xl flex items-center ${colors.text}`}>
-            <span className="mr-3">⭐</span>
-            {overallRating}
+        <div className={`p-4 rounded-lg border ${colors.bg} ${colors.text}`}>
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">⭐</span>
+            <span className="text-xl font-bold">{ratingNum}/10</span>
           </div>
+          <p className="mt-2">{overallRating.replace(/\d+\/10/, '').trim()}</p>
         </div>
       );
     }
     
     // If no rating number found, still show content but without special rating styling
     return (
-      <div className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-100 border-gray-300'}`}>
+      <div className={`p-4 rounded-lg border ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-100 border-gray-300'}`}>
         <p className={`leading-relaxed font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
           {overallRating}
         </p>
@@ -289,7 +272,8 @@ export const AIEvaluationResult: React.FC<AIEvaluationResultProps> = ({ evaluati
 
   const formatAIResponse = (response: string) => {
     const sections = parseAIResponse(response);
-    
+    redistributeOrphanedContent(sections);
+
     return (
       <div className="space-y-6">
         {/* Tank Volume Analysis Section */}
@@ -306,7 +290,7 @@ export const AIEvaluationResult: React.FC<AIEvaluationResultProps> = ({ evaluati
             </div>
           </div>
         )}
-        
+
         {/* Bioload Assessment Section */}
         <div className={`p-4 rounded-lg border ${isDarkMode ? 'bg-gray-800 border-amber-400' : 'bg-amber-50 border-amber-200'}`}>
           <h4 className={`font-bold text-lg mb-3 flex items-center ${isDarkMode ? 'text-amber-300' : 'text-amber-900'}`}>
@@ -347,7 +331,7 @@ export const AIEvaluationResult: React.FC<AIEvaluationResultProps> = ({ evaluati
             </div>
           </div>
         )}
-        
+
         {/* Schooling Requirements Section */}
         <div className={`p-4 rounded-lg border ${isDarkMode ? 'bg-gray-800 border-cyan-400' : 'bg-indigo-50 border-indigo-200'}`}>
           <h4 className={`font-bold text-lg mb-3 flex items-center ${isDarkMode ? 'text-cyan-300' : 'text-indigo-900'}`}>
@@ -392,7 +376,7 @@ export const AIEvaluationResult: React.FC<AIEvaluationResultProps> = ({ evaluati
             </div>
           </div>
         )}
-        
+
         {/* Overall Rating Section */}
         <div className={`p-4 rounded-lg border ${isDarkMode ? 'bg-gray-800 border-gray-600' : 'bg-gradient-to-r from-slate-50 to-gray-50 border-gray-300'}`}>
           <h4 className={`font-bold text-lg mb-3 flex items-center ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>

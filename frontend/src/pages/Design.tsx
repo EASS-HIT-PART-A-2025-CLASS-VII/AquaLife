@@ -330,12 +330,15 @@ export function Design() {
   // formatAIResponse function moved to AIEvaluationResult component
 
   return (
-    <div className={`space-y-6 min-h-screen p-6 transition-colors duration-200 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-      {/* Header with Saved Layouts Toggle */}
-      <div className="flex justify-between items-center">
-        <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Aquarium Designer</h2>
-        <div className="flex space-x-3">
-          {/* Saved Layouts Toggle */}
+    <div className="space-y-6 p-6">
+      {/* Tank Configuration */}
+      <div className={`rounded-lg shadow border p-6 backdrop-blur-xl
+        ${isDarkMode 
+          ? 'bg-white/5 border-white/10 hover:bg-white/10' 
+          : 'bg-white/40 border-gray-200/50 hover:bg-white/60'
+        } transition-all duration-300`}>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Tank Configuration</h3>
           <button
             onClick={() => setShowSavedLayouts(!showSavedLayouts)}
             className={`px-4 py-2 rounded-md transition-colors font-medium flex items-center ${
@@ -348,66 +351,163 @@ export function Design() {
             {showSavedLayouts ? 'Hide' : 'View'} Saved Layouts ({savedLayouts.length})
           </button>
         </div>
-      </div>
 
-      {/* Saved Layouts Panel */}
-      {showSavedLayouts && (
-        <div className={`rounded-lg shadow border p-6 ${isDarkMode ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-200'}`}>
-          <h3 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Your Saved Layouts</h3>
-          {savedLayouts.length === 0 ? (
-            <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>No saved layouts yet. Create and save your first aquarium design!</p>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {savedLayouts.map(layout => {
-                const volume = calculateTankVolumeGallons(layout.tank_length, layout.tank_width, layout.tank_height);
-                const dimensions = convertCmToInchesForDisplay(layout.tank_length, layout.tank_width, layout.tank_height);
-                const totalFish = layout.fish_data.reduce((sum: number, fish: any) => sum + fish.quantity, 0);
-                
-                return (
-                  <div key={layout.id} className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-semibold text-gray-800">{layout.tank_name}</h4>
+        {/* Saved Layouts Panel */}
+        {showSavedLayouts && (
+          <div className="mb-6">
+            <h3 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Your Saved Layouts</h3>
+            {savedLayouts.length === 0 ? (
+              <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>No saved layouts yet. Create and save your first aquarium design!</p>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {savedLayouts.map(layout => {
+                  const volume = calculateTankVolumeGallons(layout.tank_length, layout.tank_width, layout.tank_height);
+                  const dimensions = convertCmToInchesForDisplay(layout.tank_length, layout.tank_width, layout.tank_height);
+                  const totalFish = layout.fish_data.reduce((sum: number, fish: any) => sum + fish.quantity, 0);
+                  
+                  return (
+                    <div key={layout.id} className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="font-semibold text-gray-800">{layout.tank_name}</h4>
+                        <button
+                          onClick={() => deleteSavedLayout(layout.id)}
+                          className="text-red-500 hover:text-red-700 p-1"
+                          title="Delete layout"
+                        >
+                          <TrashIcon className="h-4 w-4" />
+                        </button>
+                      </div>
+                      <div className="text-sm text-gray-600 space-y-1">
+                        <p>Size: {dimensions.length}×{dimensions.width}×{dimensions.height}" ({volume} gal)</p>
+                        <p>Water: {layout.water_type}</p>
+                        <p>Fish: {totalFish} total</p>
+                        <p className="text-xs text-gray-500">Created: {new Date(layout.created_at).toLocaleDateString()}</p>
+                      </div>
                       <button
-                        onClick={() => deleteSavedLayout(layout.id)}
-                        className="text-red-500 hover:text-red-700 p-1"
-                        title="Delete layout"
+                        onClick={() => loadLayout(layout)}
+                        className="mt-3 w-full px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded text-sm transition-colors"
                       >
-                        <TrashIcon className="h-4 w-4" />
+                        Load Layout
                       </button>
                     </div>
-                    <div className="text-sm text-gray-600 space-y-1">
-                      <p>Size: {dimensions.length}×{dimensions.width}×{dimensions.height}" ({volume} gal)</p>
-                      <p>Water: {layout.water_type}</p>
-                      <p>Fish: {totalFish} total</p>
-                      <p className="text-xs text-gray-500">Created: {new Date(layout.created_at).toLocaleDateString()}</p>
-                    </div>
-                    <button
-                      onClick={() => loadLayout(layout)}
-                      className="mt-3 w-full px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded text-sm transition-colors"
-                    >
-                      Load Layout
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
 
-      {/* Tank Configuration */}
-      <TankConfiguration
-        tankDimensions={tankDimensions}
-        onDimensionChange={handleDimensionChange}
-        onGenerateTank={generateTank}
-        calculateVolume={calculateVolume}
-        selectedFishCount={selectedFish.reduce((total, fish) => total + fish.quantity, 0)}
-        showTank={showTank}
-      />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div>
+            <label htmlFor="tank-name" className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>Tank Name</label>
+            <input
+              type="text"
+              id="tank-name"
+              placeholder="Enter tank name"
+              value={tankDimensions.tankName}
+              onChange={(e) => handleDimensionChange('tankName', e.target.value)}
+              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                isDarkMode 
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+              }`}
+            />
+          </div>
+          <div>
+            <label htmlFor="unit" className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>Unit</label>
+            <select
+              id="unit"
+              value={tankDimensions.unit}
+              onChange={(e) => handleDimensionChange('unit', e.target.value)}
+              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                isDarkMode 
+                  ? 'bg-gray-700 border-gray-600 text-white' 
+                  : 'bg-white border-gray-300 text-gray-900'
+              }`}
+            >
+              <option value="inch" className={isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}>Inches</option>
+              <option value="cm" className={isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}>Centimeters</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div>
+            <label htmlFor="length" className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>Length ({tankDimensions.unit})</label>
+            <input
+              type="number"
+              id="length"
+              value={tankDimensions.length}
+              onChange={(e) => handleDimensionChange('length', parseFloat(e.target.value))}
+              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                isDarkMode 
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+              }`}
+            />
+          </div>
+          <div>
+            <label htmlFor="width" className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>Width ({tankDimensions.unit})</label>
+            <input
+              type="number"
+              id="width"
+              value={tankDimensions.width}
+              onChange={(e) => handleDimensionChange('width', parseFloat(e.target.value))}
+              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                isDarkMode 
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+              }`}
+            />
+          </div>
+          <div>
+            <label htmlFor="height" className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>Height ({tankDimensions.unit})</label>
+            <input
+              type="number"
+              id="height"
+              value={tankDimensions.height}
+              onChange={(e) => handleDimensionChange('height', parseFloat(e.target.value))}
+              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                isDarkMode 
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+              }`}
+            />
+          </div>
+          <div>
+            <label htmlFor="water-type" className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>Water Type</label>
+            <select
+              id="water-type"
+              value={tankDimensions.waterType}
+              onChange={(e) => handleDimensionChange('waterType', e.target.value)}
+              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                isDarkMode 
+                  ? 'bg-gray-700 border-gray-600 text-white' 
+                  : 'bg-white border-gray-300 text-gray-900'
+              }`}
+            >
+              <option value="freshwater" className={isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}>Freshwater</option>
+              <option value="saltwater" className={isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}>Saltwater</option>
+            </select>
+          </div>
+          <div className="flex items-end">
+            <button
+              onClick={generateTank}
+              className="w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors font-medium"
+            >
+              Generate Tank
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* Tank Visualization */}
       {showTank && (
-        <div className="bg-white rounded-lg shadow border p-6">
+        <div className={`rounded-lg shadow border p-6 backdrop-blur-xl
+          ${isDarkMode 
+            ? 'bg-white/5 border-white/10 hover:bg-white/10' 
+            : 'bg-white/40 border-gray-200/50 hover:bg-white/60'
+          } transition-all duration-300`}>
           <h3 className="text-xl font-bold mb-4 text-gray-800">Tank Preview</h3>
           
           {/* Realistic Aquarium Container */}
@@ -670,18 +770,27 @@ export function Design() {
         </div>
       )}
 
-      {/* AI Evaluation Result - Moved outside tank container */}
+      {/* AI Evaluation Result */}
       {evaluationResult && (
         <AIEvaluationResult evaluationResult={evaluationResult} />
       )}
 
       {/* Fish Catalog */}
-      <FishCatalog
-        availableFish={availableFish}
-        isLoadingFish={isLoadingFish}
-        tankWaterType={tankDimensions.waterType}
-        onAddFish={addFish}
-      />
+      <div className={`rounded-lg shadow border p-6 backdrop-blur-xl
+        ${isDarkMode 
+          ? 'bg-white/5 border-white/10 hover:bg-white/10' 
+          : 'bg-white/40 border-gray-200/50 hover:bg-white/60'
+        } transition-all duration-300`}>
+        <h3 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+          Fish Catalog ({availableFish.length} {tankDimensions.waterType} species available)
+        </h3>
+        <FishCatalog
+          availableFish={availableFish}
+          isLoadingFish={isLoadingFish}
+          tankWaterType={tankDimensions.waterType}
+          onAddFish={addFish}
+        />
+      </div>
     </div>
   );
 } 
