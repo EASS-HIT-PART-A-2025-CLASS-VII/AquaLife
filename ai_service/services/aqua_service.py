@@ -24,11 +24,12 @@ You MUST format your response with these EXACT section headers in this EXACT ord
 ✅ Recommendations
 ⭐ Overall Rating
 
-Each section must:
-1. Start with the exact header shown above (including the emoji)
-2. Be separated by a blank line
-3. Contain relevant information concisely
-4. Be based on the provided tank and fish data
+For each section:
+1. Start with the exact header shown above
+2. Provide at least 2-3 sentences of detailed, relevant information
+3. Include specific numbers and measurements when applicable
+4. Focus on practical, actionable advice
+5. Separate sections with a blank line
 
 DO NOT:
 - Add any other sections
@@ -45,7 +46,7 @@ Focus on providing practical, professional advice about:
 - Bioload management
 - Schooling needs
 - Specific recommendations
-- Overall setup rating (1-10)
+- Overall setup rating with final judgement (1-10)
 
 Your response must start with 🔵 Tank Volume Assessment and end with ⭐ Overall Rating.
 """
@@ -145,6 +146,12 @@ async def evaluate_aquarium_layout(layout: AquariumLayoutRequest) -> AIResponse:
             # Validate response content
             ai_response_content = response.choices[0].message.content
             logger.info(f"OpenRouter response length: {len(ai_response_content)} characters")
+            
+            # Log the full response for debugging
+            logger.info("Full AI Response:")
+            logger.info("-" * 80)
+            logger.info(ai_response_content)
+            logger.info("-" * 80)
             
             # Check for suspiciously short responses or invalid format
             if len(ai_response_content.strip()) < 50 or not validate_response_format(ai_response_content):

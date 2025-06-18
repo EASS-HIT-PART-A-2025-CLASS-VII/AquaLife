@@ -11,14 +11,20 @@ router = APIRouter()
 @router.post("/evaluate", response_model=AIResponse)
 async def evaluate_aquarium(layout: AquariumLayout):
     """
-    Evaluate an aquarium layout 
-    and provide AI advice.
+    Evaluate an aquarium layout and provide AI advice.
     
     Args:
         layout: AquariumLayout model containing all aquarium details
         
     Returns:
-        AIResponse containing the AI's evaluation
+        AIResponse containing the structured AI evaluation with sections:
+        - tank_volume: List of tank volume assessment points
+        - bioload: List of bioload assessment points
+        - fish_compatibility: List of fish compatibility points
+        - schooling: List of schooling requirements
+        - recommendations: List of recommendations
+        - overall_rating: List of rating points
+        - additional_info: List of additional information points
         
     Raises:
         HTTPException: If there's an error processing the request

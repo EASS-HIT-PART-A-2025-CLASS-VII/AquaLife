@@ -60,12 +60,13 @@ Your response MUST follow this EXACT format with these sections:
 ✅ Recommendations
 ⭐ Overall Rating
 
-Each section must:
+For each section:
 1. Start with the exact header shown above
-2. Be separated by a blank line
-3. Contain relevant information concisely
-4. Be based on the provided tank and fish data
+2. Provide at least 2-3 sentences of detailed, relevant information
+3. Include specific numbers and measurements when applicable
+4. Focus on practical, actionable advice
+5. Separate sections with a blank line
 
 {f"Notes: {layout.comments}" if layout.comments else ""}
 
-Provide a professional assessment following the required format."""
+Provide a professional assessment with detailed, practical advice for each section."""
