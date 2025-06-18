@@ -121,7 +121,16 @@ async def evaluate_aquarium_layout(layout: AquariumLayoutRequest) -> AIResponse:
             raise ValidationError("Fish data cannot be empty")
 
         # Pre-calculate tank volume for potential fallback use
-        volume_gallons = round((layout.tank_length * layout.tank_width * layout.tank_height) / 231, 1)
+        unit = getattr(layout, 'unit', 'cm')
+        if unit == 'inch':
+            volume_gallons = round((layout.tank_length * layout.tank_width * layout.tank_height) / 231, 1)
+            volume_liters = round(volume_gallons * 3.785, 1)
+            volume_str = f"{volume_gallons} gallon tank ({volume_liters} liters)"
+        else:
+            volume_cubic_cm = layout.tank_length * layout.tank_width * layout.tank_height
+            volume_liters = round(volume_cubic_cm / 1000, 1)
+            volume_gallons = round(volume_liters / 3.785, 1)
+            volume_str = f"{volume_liters} liter tank ({volume_gallons} gallons)"
         total_fish = sum(fish.quantity for fish in layout.fish_data)
 
         prompt = build_prompt(layout)
@@ -158,10 +167,10 @@ async def evaluate_aquarium_layout(layout: AquariumLayoutRequest) -> AIResponse:
                 logger.warning(f"Received invalid response format: '{ai_response_content}'")
                 # Use fallback response
                 ai_response_content = f"""🔵 Tank Volume Assessment
-Your {volume_gallons} gallon tank provides excellent space for your current fish population.
+Your {volume_str} provides excellent space for your current fish population.
 
 🟡 Bioload Assessment
-With {total_fish} fish in a {volume_gallons} gallon tank, your bioload is well within acceptable limits. Regular water changes and proper filtration will maintain water quality.
+With {total_fish} fish in a {volume_str}, your bioload is well within acceptable limits. Regular water changes and proper filtration will maintain water quality.
 
 🟣 Fish Compatibility & Behavior
 Current Setup: {', '.join(f'{fish.quantity} {fish.name}' for fish in layout.fish_data)}

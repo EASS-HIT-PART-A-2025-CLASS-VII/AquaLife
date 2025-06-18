@@ -29,6 +29,7 @@ def build_prompt(layout: AquariumLayoutRequest) -> str:
         display_width = layout.tank_width
         display_height = layout.tank_height
         unit_display = '"'
+        volume_str = f"{volume_gallons} gallons ({volume_liters} liters)"
     else:
         # Pre-calculate tank metrics for centimeters
         volume_cubic_cm = layout.tank_length * layout.tank_width * layout.tank_height
@@ -41,12 +42,13 @@ def build_prompt(layout: AquariumLayoutRequest) -> str:
         display_width = layout.tank_width
         display_height = layout.tank_height
         unit_display = 'cm'
+        volume_str = f"{volume_liters} liters ({volume_gallons} gallons)"
     
     return f"""Analyze this aquarium setup:
 
 Tank: {layout.tank_name}
 Size: {display_length}{unit_display} x {display_width}{unit_display} x {display_height}{unit_display}
-Volume: {volume_gallons} gallons ({volume_liters} liters)
+Volume: {volume_str}
 Water: {layout.water_type}
 Estimated capacity: {estimated_capacity} inches of fish
 
