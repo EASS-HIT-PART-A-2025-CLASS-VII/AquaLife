@@ -41,7 +41,3 @@ app.include_router(tank_maintain_routes.router, prefix="/api")
 @app.get("/")
 def read_root():
     return {"Hello": "Backend with Fish Catalog"}
-
-
-
-# run the app: uvicorn main:app --reload

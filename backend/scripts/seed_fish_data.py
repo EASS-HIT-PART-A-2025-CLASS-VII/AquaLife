@@ -151,7 +151,7 @@ def seed_fish_database():
         
         # Print summary
         final_count = fish_service.get_count()
-        print(f"\n🎉 Database seeding completed!")
+        print("\n🎉 Database seeding completed!")
         print(f"   Total fish in catalog: {final_count}")
         print(f"   Freshwater fish: {len(FRESHWATER_FISH)}")
         print(f"   Saltwater fish: {len(SALTWATER_FISH)}")

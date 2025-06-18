@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import Mock, patch
-from ai_service.models.ai_model import AquariumLayoutRequest, FishEntry, AIResponse
-from ai_service.services.aqua_service import evaluate_aquarium_layout, OpenRouterError, ValidationError, AquariumServiceError
+from ai_service.models.ai_model import AquariumLayoutRequest, FishEntry
+from ai_service.services.aqua_service import evaluate_aquarium_layout, ValidationError, AquariumServiceError
 import openai
 
 # Test data

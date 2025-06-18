@@ -7,7 +7,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def hash_password(password: str) -> str:
     hashed = pwd_context.hash(password)
-    logger.debug(f"Password hashed successfully")
+    logger.debug("Password hashed successfully")
     return hashed
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:

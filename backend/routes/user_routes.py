@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Request
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from backend.db.db import get_db
 from backend.models.user_model import User, UserCreate, UserResponse, UserLogin
@@ -40,7 +40,7 @@ async def google_auth_callback(code: str = None, data: str = None, db: Session =
         # If we have data, this is the redirect from our backend
         if data:
             # Redirect to the frontend with the data
-            return RedirectResponse(url=f"{settings.FRONTEND_URL}/auth/google/callback?data={encoded_data}")
+            return RedirectResponse(url=f"{settings.FRONTEND_URL}/auth/google/callback?data={data}")
 
         # Otherwise, this is the initial callback from Google
         logger.debug(f"Received callback with code: {code}")

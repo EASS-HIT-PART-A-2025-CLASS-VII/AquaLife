@@ -1,10 +1,10 @@
 import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 from datetime import datetime, timezone
-from backend.models.tank_maintain_model import TankMaintenanceCreate, TankMaintenanceResponse
+from backend.models.tank_maintain_model import TankMaintenanceCreate
 from backend.services.tank_maintain_service import TankMaintenanceService
 from backend.services.aquarium_service import AquariumService
-from backend.models.aqualayout_model import AquaLayoutCreate, FishEntry
+from backend.models.aqualayout_model import AquaLayoutCreate
 from fastapi import HTTPException
 
 # Test data

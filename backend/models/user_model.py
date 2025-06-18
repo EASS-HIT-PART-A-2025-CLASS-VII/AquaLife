@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, JSON
+from sqlalchemy import Column, Integer, String, Date
 from backend.db.base import Base
 from pydantic import BaseModel, ConfigDict, EmailStr
 from typing import Literal, Optional

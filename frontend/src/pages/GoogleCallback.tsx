@@ -59,7 +59,7 @@ export function GoogleCallback() {
     };
 
     handleCallback();
-    // eslint-disable-next-line
+     
   }, [searchParams, login, navigate]);
 
   return (

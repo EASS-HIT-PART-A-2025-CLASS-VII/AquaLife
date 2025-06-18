@@ -1,6 +1,5 @@
 from sqlalchemy.orm import Session
 from backend.models.user_model import User
-from backend.repositories.user_repository import UserRepository
 from backend.security.hashing import hash_password, verify_password
 from backend.security.auth import create_access_token
 from fastapi import HTTPException

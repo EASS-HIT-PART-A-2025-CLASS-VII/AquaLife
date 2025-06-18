@@ -9,7 +9,6 @@ Usage (from project root):
 """
 
 import requests
-import json
 import sys
 
 
@@ -72,7 +71,7 @@ def test_fish_endpoints():
             fish_data = response.json()
             print(f"   ✅ Success! Fish ID 1: {fish_data['name']}")
         elif response.status_code == 404:
-            print(f"   ⚠️  Fish with ID 1 not found (404)")
+            print("   ⚠️  Fish with ID 1 not found (404)")
         else:
             print(f"   ❌ Failed: {response.status_code} - {response.text}")
         
@@ -133,10 +132,10 @@ def test_static_file_access():
     try:
         response = requests.get(test_image_url)
         if response.status_code == 200:
-            print(f"   ✅ Static file access working! Image found.")
+            print("   ✅ Static file access working! Image found.")
         elif response.status_code == 404:
-            print(f"   ⚠️  Static file path working, but image not found (expected for now)")
-            print(f"   📝 To add images, place them in: backend/static/images/fish/")
+            print("   ⚠️  Static file path working, but image not found (expected for now)")
+            print("   📝 To add images, place them in: backend/static/images/fish/")
         else:
             print(f"   ❌ Static file access issue: {response.status_code}")
     except Exception as e:
