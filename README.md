@@ -375,7 +375,7 @@ docker-compose -f docker-compose.test.yml up --abort-on-container-exit
 
 
 
-Demo: https://drive.google.com/file/d/1xUT41kUaW362kliT74-W9XKnOphVTirN/view?usp=drive_link
+Demo: https://youtu.be/UtKnLn_wnOM
 
 **Built with ❤️ for the aquarium community**
 
